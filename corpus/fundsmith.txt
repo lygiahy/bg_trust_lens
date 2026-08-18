@@ -1,0 +1,102 @@
+__Secure-ROLLOUT_TOKENUsed to track user’s interaction with embedded content.Maximum Storage Duration: 180 daysType: HTTP Cookie
+__Secure-YECStores the user's video player preferences using embedded YouTube videoMaximum Storage Duration: SessionType: HTTP Cookie
+__Secure-YNIDUsed to track user’s interaction with embedded content.Maximum Storage Duration: 180 daysType: HTTP Cookie
+LAST_RESULT_ENTRY_KEYUsed to track user’s interaction with embedded content.Maximum Storage Duration: SessionType: HTTP Cookie
+LogsDatabaseV2:V#||LogsRequestsStoreUsed to track user’s interaction with embedded content.Maximum Storage Duration: PersistentType: IndexedDB
+TESTCOOKIESENABLEDUsed to track user’s interaction with embedded content.Maximum Storage Duration: 1 dayType: HTTP Cookie
+VISITOR_INFO1_LIVETries to estimate the users' bandwidth on pages with integrated YouTube videos.Maximum Storage Duration: 180 daysType: HTTP Cookie
+YSCRegisters a unique ID to keep statistics of what videos from YouTube the user has seen.Maximum Storage Duration: SessionType: HTTP Cookie
+yt-icons-last-purgedNecessary for the implementation and functionality of YouTube video-content on the website. Maximum Storage Duration: PersistentType: HTML Local Storage
+YtIdbMeta#databasesUsed to track user’s interaction with embedded content.Maximum Storage Duration: PersistentType: IndexedDB
+Fund Factsheet
+Standing Data
+Key Facts
+Fund Performance Analysis
+Geographic Split
+Sector Split
+Security Identification Codes
+Investment objective
+The Fundsmith Equity Fund (the "Fund") will invest in equities on a global basis. The Fund’s approach is to be a long-term investor in its chosen stocks. It will not adopt short-term trading strategies. The Fund has stringent investment criteria which the Authorised Corporate Director and the Investment Manager adhere to in selecting securities for the Fund's investment portfolio. These criteria aim to ensure that the Fund invests in:
+- high quality businesses that can sustain a high return on operating capital employed;
+- businesses whose advantages are difficult to replicate;
+- businesses which do not require significant leverage to generate returns;
+- businesses with a high degree of certainty of growth from reinvestment of their cash flows at high rates of return;
+- businesses that are resilient to change, particularly technological innovation;
+- businesses whose valuation is considered by the Fund to be attractive.
+The Fund will not invest in derivatives and will not hedge any currency exposure arising from within the operations of an investee business nor from the holding of an investment denominated in a currency other than sterling.
+Principal Risks
+- The value of companies invested in, and therefore the value of the Fund, will rise and fall, and there is no guarantee that you will get your investment back. An investment in the Fund should only be made by those persons who are able to sustain a loss on their investment. The shares should be viewed as long-term investments (at least 5 years).
+- The Fund's portfolio is a global portfolio and many of the investments are not denominated in GBP. There is no currency hedging made by the Fund. The GBP price of the shares may therefore rise or fall purely on account of exchange rate movements.
+- The Fund's portfolio complies with the UCITS requirements on spread of investment. Having said that, application of the investment criteria described above significantly limits the number of potential investments: the Fund generally invests in 20 to 30 stocks and so it is more concentrated than many other funds. This means that the performance or underperformance of a single stock has a greater effect on the price of the Fund.
+- If you are unsure about the suitability of the Fund for you, please seek professional advice.
+- Past performance is not a guide to future performance.
+Performance, % Total Return
+The Fund is not managed with reference to any benchmark, the above comparators are provided for information purposes only. 1T class accumulation shares, net of fees priced at midday UK time, source: Bloomberg. 2MSCI World Index (£ Net) priced at close of business US time, source: www.msci.com. The MSCI World Index is a developed world index of global equities across all sectors and, as such, is a fair comparison given the Company's investment objective and policy. 3Bloomberg Series-E UK Govt 5 - 10 yr Bond Index, source: Bloomberg. 4 £ Interest Rate, source: Bloomberg.
+Portfolio Comment for July 2026
+A number of portfolio changes were implemented in July. These are detailed in the Semi-Annual Letter to Shareholders which is available on the fund website. The top 5 contributors in the month were Microsoft, Mastercard, Sage, Automatic Data Processing and Amadeus. The top 5 detractors were AppLovin, Nextpower, TSMC, Uber and Stryker.
+Top 10 holdings
+- Mastercard
+- Stryker
+- Waters
+- Amadeus
+- Visa
+- Microsoft
+- L'Oréal
+- Yum! Brands
+- Uber
+- Church & Dwight
+Our values
+- No Fees for Performance
+- No Up Front Fees
+- No Nonsense
+- No Debt or Derivatives
+- No Shorting
+- No Market Timing
+- No Index Hugging
+- No Trading
+- No Hedging
+Fundsmith knows
+Just a small number of high quality, resilient, global growth companies that are good value and which we intend to hold for a long time, and in which we invest our own money.
+No data available
+Unable to render factsheet chart. Please try a different fund selection or refresh the page. This issue has been reported.
+Monthly performance table, % Total Return, T Class, Accumulation Shares
+Dividends per Share (p)
+Accumulation share prices include all dividends received.
+Income shares go ex-dividend on 30th June and 31st December and the dividends are paid out on or about 28th February and 31st August.
+◊ Active Share measures how much the portfolio holdings differ from the comparator benchmark index (MSCI World) i.e. a portfolio that is identical to the benchmark would have 0% active share. Source: Bloomberg.
+* The OCF (Ongoing Charges Figure) is the total expenses paid by the fund (excluding bank overdraft interest), annualised, against its average net asset value. The OCF will fluctuate as the average net assets and costs change. The OCF is updated following the publication of accounts for the periods ending 30th June and 31st December.
+Δ The PTR (Portfolio Turnover Rate) is a measure of the fund's trading activity, and has been calculated by taking the total share purchases and sales less total creations and liquidations divided by the average net asset value of the fund.
+# 7 Day Fund Liquidity is calculated based upon 30% of trailing 20 day average volume.
+§ Gross Yield reflects the historic dividend income received by the fund in the preceding 12 months before the deduction of all expenses including management fees. Net Yield is Gross Yield less the deduction of all expenses including management fees i.e. Gross Yield less the OCF. In both cases we use the T Class Shares as reference. Please note that rates would vary for I Class and R Class shares.
+N.B. When a position is being built for the fund the company name is not disclosed on the factsheet(www.fundsmith.co.uk/factsheet).
+N.B. The Morningstar Silver rating only applies to T and I class shares.
+Disclaimer: A Key Investor Information Document and an English language prospectus for the Fundsmith Equity Fund are available via the Fundsmith website (www.fundsmith.co.uk/forms) or on request and investors should consult these documents before purchasing shares in the fund. Past performance is not necessarily a guide to future performance. The value of investments and the income from them may fall as well as rise and be affected by changes in exchange rates, and you may not get back the amount of your original investment. Fundsmith LLP does not offer investment advice or make any recommendations regarding the suitability of its product.
+MSCI World Index is the exclusive property of MSCI Inc. MSCI makes no express or implied warranties or representations and shall have no liability whatsoever with respect to any MSCI data contained herein. The MSCI data may not be further redistributed or used as a basis for other indices or any securities or final products. This report is not approved, reviewed or produced by MSCI. The Global Industry Classification Standard (GICS) was developed by and is the exclusive property of MSCI and Standard & Poor’s and “GICS®” is a service mark of MSCI and Standard & Poor’s.
+This product does not have a UK sustainable investment label as it does not have a sustainability goal as defined by the FCA’s SFDR.
+Singapore
+This document is communicated by Fundsmith LLP which is authorised and regulated by the Financial Conduct Authority. Fundsmith Equity Fund (the “Fund”), which is the subject of this document, does not relate to a collective investment scheme which is authorised under section 286 of the Securities and Futures Act 2001 of Singapore as amended or modified (the “SFA”) or Recognised under section 287 of the SFA. This document has not been registered as a prospectus with the Monetary Authority of Singapore (the “MAS”). Accordingly, this document and any other document or material in connection with the offer or sale, or invitation for subscription or purchase, of units in the Fund may not be circulated or distributed, nor may units be offered or sold, or be made the subject of an invitation for subscription or purchase, whether directly or indirectly, to persons in Singapore other than 1. To an institutional investor (as defined in Section 4A of the SFA)  under section 304 of the SFA; or 2. To a relevant person (as defined in Section 305(5) of the SFA)  pursuant to section 305(1) of the SFA or any person pursuant to section 305(2) of the SFA (and such distribution is in accordance with the conditions specified in section 305 of the SFA); or 3. Otherwise pursuant to, and in accordance with the conditions of, any other applicable provision of the SFA.
+In particular, for investment funds that are not authorised or recognised by the MAS, units in such funds are not allowed to be offered to the retail public. This document and any other document or material issued in connection with the offer or sale is not a prospectus as defined in the SFA. Accordingly, statutory liability under the SFA in relation to the content of prospectuses does not apply and investors should consider carefully whether the investment is suitable for them.
+Australia
+By receiving materials with respect to the Fund, each prospective investor is deemed to represent that it is a wholesale client and professional or sophisticated investor (as those terms are defined in the Australian Corporations Act). Such materials are not intended to be distributed or passed on, directly or indirectly, to any other class of persons in Australia. The information in this factsheet has been prepared for information purposes and sets out information relating to the offer of shares in the Fund. It does not take into account any investor's investment objectives, financial situation or particular needs. Before acting on the information the investor should consider its appropriateness having regard to their investment objectives, financial situation and needs. Any "financial product advice" (as that term is defined in the Australian Corporations Act) contained in this document is provided by the Fund. The Fund does not hold an Australian financial services licence which authorises it to provide advice in relation to the shares in the Fund. No cooling-off regime applies to an acquisition of the shares in the Fund.
+United Arab Emirates
+This document relates to the Fund which is not subject to any form of regulation or approval by the Securities and Commodities Authority, the Central Bank, the Dubai Financial Services Authority or the Financial Services Regulatory Authority (collectively, the “Aforementioned Regulators”). This document is intended for distribution only to persons who constitute professional or institutional investors and must not, therefore, be delivered to, or relied on by, any other category of investor.  The Aforementioned Regulators do not have any responsibility for reviewing or verifying this document or other documents in connection with this Fund. Accordingly, the Aforementioned Regulators have not approved this document or any other associated documents, nor taken any steps to verify the information contained within it, and they do not have any responsibility for it. The units to which this document relates may be subject to restrictions on their resale. Prospective unit holders should conduct their own due diligence on the unit. If you do not understand the contents of this document you should consult an authorized financial adviser.
+Equity Fund Factsheet Archive
+- 2026 Factsheets
+- 2025 Factsheets
+- 2024 Factsheets
+- 2023 Factsheets
+- 2022 Factsheets
+- 2021 Factsheets
+- 2020 Factsheets
+- 2019 Factsheets
+- 2018 Factsheets
+- 2017 Factsheets
+- 2016 Factsheets
+- 2015 Factsheets
+- 2014 Factsheets
+- 2013 Factsheets
+- 2012 Factsheets
+- 2011 Factsheets
+- 2010 Factsheets
+Terry Smith
+Chief Executive & CIOTerry Smith graduated in History from University College Cardiff in 1974. He worked for Barclays Bank from 1974-83 and became an Associate of the Chartered Institute of Bankers in 1976. He obtained an MBA at The Management College, Henley in 1979. He became a stockbroker with W Greenwell & Co in 1984 and later joined Barclays de Zoete Wedd, holding the position of the top-rated bank analyst in London from 1984-89. In 1990 he became head of UK Company Research at UBS Phillips & Drew, a position from which he was dismissed in 1992 following the publication of his best selling book Accounting for Growth. He joined Collins Stewart shortly after, and became a director in 1996. In 2000 he became Chief Executive and led the management buy-out of Collins Stewart, which was floated on the London Stock Exchange five months later. In 2003 Collins Stewart acquired Tullett Liberty and followed this in 2004 with the acquisition of Prebon Group, creating the world's second largest inter-dealer broker. Collins Stewart and Tullett Prebon were demerged in 2006 with Terry remaining CEO of Tullett Prebon until September 2014. In 2010 he founded Fundsmith where he is CEO and CIO. In 2012 he was appointed a Member of the New Zealand Order of Merit for services to New Zealand-UK relations following the success of his campaign to commemorate the New Zealander, Air Marshal Sir Keith Park.

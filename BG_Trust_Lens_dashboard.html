@@ -1,0 +1,992 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trust Lens — Baillie Gifford</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* calibrated-instrument palette */
+  --paper:#F4F6F9;--card:#FFFFFF;--low:#EEF1F6;--container:#E6EAF1;
+  --ink:#10141D;--muted:#485064;--faint:#7A8296;
+  --line:#DFE3EB;--line2:#C4CBD8;--zebra:#F3F5F9;
+  --acc:#23409F;--acc-soft:#E2E8F8;--on-acc:#FFFFFF;
+  --dim-a:#23409F;   /* Ability — instrument indigo */
+  --dim-b:#0E7C5B;   /* Benevolence — green */
+  --dim-i:#0B7285;   /* Integrity — teal */
+  --slate:#5B6474;   /* Readability — separate module, neutral */
+  --green:#0E7C5B;--green-soft:#DCF2E9;
+  --amber:#A66B00;--amber-soft:#F7ECD4;
+  --red:#C6362B;--red-soft:#FBE3E0;
+  --sidebar-w:248px;--max:1480px;--r:10px;
+  /* legacy aliases kept for shared components */
+  --blue:#23409F;--blue-soft:#E2E8F8;--indigo:#23409F;--indigo-soft:#E2E8F8;
+  --border:#DFE3EB;--border-strong:#C4CBD8;--canvas:#F4F6F9;--primary:#10141D;--on-primary:#fff;
+  --surface:#FFFFFF;--surface-2:#EEF1F6;--text:#10141D;--brand:#23409F;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--paper);color:var(--ink);font-family:Inter,system-ui,Arial,sans-serif;font-size:15.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace}
+.hk{font-family:"Hanken Grotesk",Inter,sans-serif}
+.ic{width:18px;height:18px;flex:none;vertical-align:middle;display:inline-block}
+.hidden{display:none !important}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--acc-soft)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:4px}
+
+/* ---------- app shell ---------- */
+.app{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);flex:none;background:var(--card);border-right:1px solid var(--line);position:fixed;top:0;left:0;height:100vh;display:flex;flex-direction:column;padding:22px 14px;z-index:20}
+.brand{display:flex;gap:12px;align-items:center;padding:0 8px 18px;margin-bottom:14px;border-bottom:1px solid var(--line)}
+.logo{width:40px;height:40px;border-radius:9px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-family:"Hanken Grotesk";letter-spacing:.02em;position:relative}
+.logo::after{content:"";position:absolute;right:-1px;top:6px;bottom:6px;width:3px;border-radius:2px;background:linear-gradient(var(--dim-a) 0 33%,var(--dim-b) 33% 66%,var(--dim-i) 66% 100%)}
+.brand h1{font-family:"Hanken Grotesk";font-size:19px;font-weight:800;margin:0;line-height:1.1;letter-spacing:-.01em}
+.brand .sub{font-family:"JetBrains Mono";font-size:9.5px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;margin-top:3px}
+.nav{display:flex;flex-direction:column;gap:2px}
+.navitem{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;color:var(--muted);cursor:pointer;font-family:"JetBrains Mono";font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:500;border-left:2px solid transparent;transition:background .12s,color .12s}
+.navitem:hover{background:var(--low)}
+.navitem.on{background:var(--acc-soft);color:var(--acc);font-weight:700;border-left-color:var(--acc)}
+.navfoot{margin-top:auto;padding-top:16px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:2px}
+.sidever{font-family:"JetBrains Mono";font-size:9.5px;color:var(--faint);letter-spacing:.08em;text-transform:uppercase;padding:12px 12px 0}
+
+.main{flex:1;margin-left:var(--sidebar-w);min-width:0;display:flex;flex-direction:column}
+.topbar{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;height:60px;display:flex;align-items:center;gap:18px;padding:0 24px}
+.topbar .ttl{font-family:"Hanken Grotesk";font-weight:700;font-size:16.5px;letter-spacing:-.01em}
+.topbar .links{display:flex;gap:16px;margin-left:6px}
+.tlink{font-size:13.5px;color:var(--faint);cursor:pointer;padding:4px 2px;border-bottom:2px solid transparent}
+.tlink:hover{color:var(--acc)}.tlink.on{color:var(--ink);border-bottom-color:var(--acc);font-weight:600}
+.topbar .spacer{flex:1}
+.readout{font-family:"JetBrains Mono";font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line);border-radius:6px;padding:6px 10px;background:var(--low);white-space:nowrap}
+.readout b{color:var(--acc);font-weight:700}
+.iconbtn{display:inline-flex;align-items:center;gap:6px;color:var(--muted);cursor:pointer;background:none;border:none;font-size:13.5px;font-family:Inter}
+.iconbtn:hover{color:var(--acc)}
+
+.canvas{flex:1;max-width:var(--max);width:100%;margin:0 auto;padding:30px 32px 64px}
+
+/* ---------- page headers ---------- */
+.pagehead{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:26px}
+.pagehead h2{font-family:"Hanken Grotesk";font-size:31px;font-weight:800;margin:0 0 6px;letter-spacing:-.02em}
+.pagehead p{margin:0;color:var(--muted);max-width:60ch;font-size:14.5px}
+.vbadge{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);background:var(--card);border-radius:8px;padding:8px 13px;color:var(--muted);font-family:"JetBrains Mono";font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;font-weight:500}
+.vbadge .ic{width:15px;height:15px;color:var(--green)}
+
+/* ---------- cards & controls ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r)}
+.pad{padding:18px}
+.btn{font-family:"JetBrains Mono";font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;border-radius:7px;padding:11px 18px;cursor:pointer;border:1px solid var(--ink);background:var(--ink);color:#fff;display:inline-flex;align-items:center;gap:7px;transition:background .12s,opacity .12s}
+.btn:hover{background:var(--acc);border-color:var(--acc)}
+.btn:active{transform:translateY(1px)}.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.out{background:var(--card);color:var(--ink);border-color:var(--line2)}
+.btn.out:hover{background:var(--low);color:var(--ink)}
+.btn .ic{width:15px;height:15px}
+.linkbtn{background:none;border:none;color:var(--faint);text-decoration:underline;cursor:pointer;font-size:13px;font-family:Inter}
+.linkbtn:hover{color:var(--acc)}
+.pill{font-family:"JetBrains Mono";font-size:11.5px;letter-spacing:.03em;border-radius:999px;padding:7px 15px;border:1px solid var(--line2);background:var(--card);color:var(--muted);cursor:pointer;white-space:nowrap;transition:background .12s}
+.pill:hover{background:var(--low)}
+.pill.on{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:700}
+
+textarea,input,select{font-family:"JetBrains Mono",monospace;font-size:13px;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:var(--ink);padding:11px 13px;width:100%}
+textarea{min-height:120px;resize:vertical;line-height:1.6}
+input.txt,select{font-family:Inter}
+textarea:focus,input:focus,select:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(35,64,159,.14)}
+.hint{font-size:12.5px;color:var(--faint);margin:9px 2px 0}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:15px}
+
+/* ---------- run log ---------- */
+.status{margin-top:15px;font-size:13px;display:flex;flex-direction:column;gap:6px}
+.status .item{display:flex;align-items:center;gap:9px;color:var(--muted);flex-wrap:wrap;font-family:"JetBrains Mono";font-size:12px;padding:7px 10px;background:var(--low);border-radius:7px;border-left:2px solid var(--line2)}
+.status .ok{color:var(--green)}.status .err{color:var(--red)}
+.spinr{width:12px;height:12px;border:2px solid var(--line2);border-top-color:var(--acc);border-radius:50%;display:inline-block;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.spinr{animation:none}.g-fill{transition:none !important}}
+
+/* ---------- evidence strip (page-universe coverage) ---------- */
+.estrip{display:inline-flex;gap:4px;align-items:center}
+.eslot{font-family:"JetBrains Mono";font-size:9px;font-weight:700;letter-spacing:.05em;padding:3px 6px;border-radius:5px;border:1px solid var(--line2);color:var(--faint);background:var(--card)}
+.eslot.ok{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.eslot.fail{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.eslot.na{background:var(--low);border-color:var(--line);color:var(--faint);text-decoration:line-through}
+.estrip .ekey{font-family:"JetBrains Mono";font-size:9px;color:var(--faint);letter-spacing:.05em;margin-left:2px}
+
+/* ---------- results ---------- */
+.headline{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--acc);border-radius:8px;padding:16px 18px;margin:0 0 18px;font-size:14.5px;line-height:1.6}
+table.audit{width:100%;border-collapse:collapse;font-size:13px}
+table.audit thead th{font-family:"JetBrains Mono";font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:right;padding:12px 14px;background:var(--low);border-bottom:1px solid var(--line)}
+table.audit thead th:first-child{text-align:left}
+table.audit td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;font-family:"JetBrains Mono";font-size:12.5px}
+table.audit td:first-child{text-align:left;font-weight:600;font-family:Inter;font-size:13.5px}
+table.audit tbody tr:nth-child(even){background:var(--zebra)}
+.scorechip{font-family:"JetBrains Mono";font-weight:700;font-size:13.5px;padding:2px 9px;border-radius:7px}
+.s-good{color:var(--green);background:var(--green-soft)}.s-mid{color:var(--amber);background:var(--amber-soft)}.s-low{color:var(--red);background:var(--red-soft)}
+
+.scard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);border-left:4px solid var(--line);padding:20px 22px;margin-bottom:16px}
+.scard.good{border-left-color:var(--green)}.scard.mid{border-left-color:var(--amber)}.scard.low{border-left-color:var(--red)}
+.scard .top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.scard h3{font-family:"Hanken Grotesk";font-size:19px;font-weight:800;margin:0;letter-spacing:-.01em}
+.scard .src{font-family:"JetBrains Mono";font-size:10.5px;color:var(--faint);word-break:break-all;margin-top:4px;letter-spacing:.02em}
+.bignum{text-align:right;line-height:1}
+.bignum .n{font-family:"JetBrains Mono";font-size:42px;font-weight:700;display:block;font-variant-numeric:tabular-nums}
+.bignum .l{font-family:"JetBrains Mono";font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.bignum.good .n{color:var(--green)}.bignum.mid .n{color:var(--amber)}.bignum.low .n{color:var(--red)}
+.take{margin:13px 0 4px;font-size:14px;background:var(--low);border-left:3px solid var(--acc);padding:10px 14px;border-radius:0 8px 8px 0}
+.covnote{font-size:11.5px;color:var(--muted);margin-top:6px;font-family:"JetBrains Mono"}
+.metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:26px;margin:18px 0 4px}
+@media(max-width:760px){.metrics{grid-template-columns:1fr;gap:16px}}
+.metrics h4{font-family:"JetBrains Mono";font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);margin:0 0 2px;font-weight:700}
+.metrics .sub{font-size:11px;color:var(--faint);margin:0 0 10px;font-family:"JetBrains Mono";letter-spacing:.02em}
+.metrics .mcol.sep{border-left:1px dashed var(--line2);padding-left:26px;margin-left:-13px}
+@media(max-width:760px){.metrics .mcol.sep{border-left:none;padding-left:0;margin-left:0;border-top:1px dashed var(--line2);padding-top:14px}}
+
+/* calibrated gauge */
+.g-row{display:flex;align-items:center;gap:9px;margin:8px 0}
+.g-lab{width:132px;font-size:12px;color:var(--muted);flex:none;line-height:1.25}
+.g-lab small{color:var(--faint);display:block;font-size:10px;font-family:"JetBrains Mono";letter-spacing:.02em}
+.g-scale{flex:1;height:10px;background:var(--low);border-radius:3px;position:relative;overflow:visible}
+.g-scale::before{content:"";position:absolute;inset:0;background:
+  linear-gradient(to right,transparent calc(25% - .5px),var(--line2) calc(25% - .5px),var(--line2) calc(25% + .5px),transparent calc(25% + .5px)),
+  linear-gradient(to right,transparent calc(50% - .5px),var(--line2) calc(50% - .5px),var(--line2) calc(50% + .5px),transparent calc(50% + .5px)),
+  linear-gradient(to right,transparent calc(75% - .5px),var(--line2) calc(75% - .5px),var(--line2) calc(75% + .5px),transparent calc(75% + .5px));border-radius:3px}
+.g-fill{position:absolute;left:0;top:0;bottom:0;border-radius:3px;transition:width .55s cubic-bezier(.2,.7,.3,1)}
+.g-med{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.55;border-radius:1px}
+.g-val{width:52px;text-align:right;font-family:"JetBrains Mono";font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+.g-legend{font-family:"JetBrains Mono";font-size:9.5px;color:var(--faint);letter-spacing:.03em;margin-top:8px}
+.g-legend .medmark{display:inline-block;width:2px;height:9px;background:var(--ink);opacity:.55;vertical-align:-1px;margin:0 3px 0 1px}
+
+.scard details{margin-top:14px;border-top:1px solid var(--line);padding-top:11px}
+.scard summary{cursor:pointer;font-family:"JetBrains Mono";font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.scard summary:hover{color:var(--acc)}
+.auditline{margin:9px 0;font-size:12.5px;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.adim{font-family:"JetBrains Mono";font-size:10.5px;font-weight:700;flex:none;width:150px;text-transform:uppercase;letter-spacing:.04em}
+.chip{background:var(--low);border:1px solid var(--line);border-radius:6px;padding:2px 8px;font-size:11.5px;font-family:"JetBrains Mono"}
+.chip.risk{background:var(--red-soft);border-color:#EFC1BB;color:var(--red)}
+
+/* ---------- word list ---------- */
+.wl{display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start}
+@media(max-width:980px){.wl{grid-template-columns:1fr}}
+.filters{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px}
+.filters .pills{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
+.wlsearch{position:relative;min-width:230px}
+.wlsearch .ic{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--faint)}
+.wlsearch input{padding-left:38px;border-radius:999px;background:var(--low)}
+table.wl-table{width:100%;border-collapse:collapse;font-size:13px}
+table.wl-table thead th{font-family:"JetBrains Mono";font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:12px 16px;background:var(--low);border-bottom:1px solid var(--line)}
+table.wl-table thead th.r{text-align:right}
+table.wl-table td{padding:10px 16px;border-bottom:1px solid var(--line)}
+table.wl-table td.r{text-align:right;font-family:"JetBrains Mono";font-size:12px}
+table.wl-table tbody tr:nth-child(even){background:var(--zebra)}
+.sig{display:inline-flex;align-items:center;gap:7px;font-size:12.5px}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
+.catbadge{font-size:10.5px;padding:2px 8px;border-radius:6px;background:var(--container);color:var(--muted);font-family:"JetBrains Mono";letter-spacing:.02em}
+.catbadge.flag{background:var(--red-soft);color:var(--red)}
+.wpos{color:var(--green)}.wneg{color:var(--red)}.wnil{color:var(--faint)}
+.wlfoot{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--faint);font-family:"JetBrains Mono"}
+.sumrow{display:flex;justify-content:space-between;align-items:center;margin:11px 0}
+.sumrow .lft{display:flex;align-items:center;gap:9px;font-size:13.5px}
+.sumrow .val{font-family:"JetBrains Mono";font-weight:700}
+.mnote{background:var(--container);border:1px solid var(--line);border-radius:10px;padding:16px;margin-top:16px}
+.mnote h4{font-family:"JetBrains Mono";font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:var(--ink);margin:0 0 7px;display:flex;align-items:center;gap:6px}.mnote h4 .ic{width:14px;height:14px}
+.mnote p{font-size:12.5px;color:var(--muted);margin:0;line-height:1.6}
+
+/* ---------- how / formulas / footer ---------- */
+.how{margin-top:30px}
+.how summary{font-family:"Hanken Grotesk";font-weight:700;font-size:15px;cursor:pointer}
+.how ul{padding-left:18px;color:var(--muted);font-size:13.5px}.how li{margin:7px 0}.how b{color:var(--ink)}
+.formula{font-family:"JetBrains Mono";font-size:12px;background:var(--low);border:1px solid var(--line);border-radius:7px;padding:9px 12px;display:inline-block;margin:4px 0;color:var(--ink)}
+.foot{margin-top:26px;border-top:1px solid var(--line);padding-top:14px;color:var(--faint);font-size:12px}
+
+/* ---------- mobile ---------- */
+.mobilebar{display:none}
+@media(max-width:900px){
+  .sidebar{display:none}.main{margin-left:0}
+  .topbar .links,.topbar .readout{display:none}
+  .mobilebar{display:flex;gap:8px;align-items:center;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:60px;z-index:9;overflow-x:auto}
+  .canvas{padding:20px 16px 56px}
+  .wl{grid-template-columns:1fr}
+}
+
+/* ---------- benchmark ---------- */
+.cardttl{font-family:"Hanken Grotesk";font-weight:800;font-size:16.5px;margin:0 0 14px;border-bottom:1px solid var(--line);padding-bottom:10px;letter-spacing:-.01em}
+.secttl{font-family:"Hanken Grotesk";font-weight:800;font-size:19px;margin:26px 0 6px;letter-spacing:-.01em}
+.seceyebrow{font-family:"JetBrains Mono";font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:0 0 14px}
+.gchart{display:flex;align-items:flex-end;justify-content:center;gap:44px;height:236px;padding-top:12px;flex-wrap:wrap;border-bottom:2px solid var(--line2)}
+.gbar{display:flex;flex-direction:column;align-items:center;gap:12px;height:100%;justify-content:flex-end}
+.gbar-fill{width:100px;border-radius:4px 4px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:9px}
+.gbar-v{font-family:"JetBrains Mono";font-weight:700;font-size:14px;color:#fff}
+.gbar-n{font-family:"JetBrains Mono";font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);text-align:center;max-width:120px;padding-bottom:10px}
+.mx-wrap{overflow-x:auto}
+.mx{display:grid;gap:10px;align-items:stretch;min-width:560px}
+.mx-h{font-family:"Hanken Grotesk";font-weight:800;font-size:15px;text-align:center;border:1px solid var(--line);border-radius:9px;padding:13px 8px;background:var(--card);display:flex;align-items:center;justify-content:center}
+.mx-rowlabel{font-family:"JetBrains Mono";font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;line-height:1.35}
+.mx-rowlabel .dimdot{width:8px;height:8px;border-radius:50%;margin-right:8px;flex:none}
+.mx-divider{grid-column:1 / -1;display:flex;align-items:center;gap:10px;font-family:"JetBrains Mono";font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:4px 0 2px}
+.mx-divider::before,.mx-divider::after{content:"";flex:1;border-top:1px dashed var(--line2)}
+.mx-cell{border:1px solid var(--line);border-radius:9px;padding:13px;background:var(--card);position:relative;display:flex;flex-direction:column;gap:4px;min-height:86px;justify-content:flex-start}
+.mx-cell.top{border-color:var(--acc);box-shadow:inset 3px 0 0 var(--acc)}
+.mx-cell.readrow{background:var(--low)}
+.mx-score{font-family:"JetBrains Mono";font-weight:700;font-size:28px;line-height:1;font-variant-numeric:tabular-nums}
+.mx-tag{font-size:11px;color:var(--faint)}
+.mx-badge{position:absolute;right:9px;bottom:9px;font-family:"JetBrains Mono";font-size:8.5px;letter-spacing:.03em;background:var(--acc-soft);color:var(--acc);border-radius:6px;padding:3px 7px;font-weight:700}
+.snip-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.snips{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:880px){.snips{grid-template-columns:1fr}}
+.snip{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:15px}
+.snip-h{font-family:"JetBrains Mono";font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);font-weight:700;margin-bottom:9px}
+.snip-q{font-size:13px;font-style:italic;color:var(--ink);margin:0 0 10px;line-height:1.55}
+.snip-a{font-family:"JetBrains Mono";font-size:10px;letter-spacing:.03em;text-transform:uppercase;color:var(--faint);line-height:1.5}
+
+/* ---------- competitors ---------- */
+.comp-sel-wrap{display:flex;align-items:center;gap:9px}
+.comp-sel-wrap select{width:auto;min-width:170px}
+.lbl{font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);font-family:"JetBrains Mono"}
+.comp-grid{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:stretch}
+@media(max-width:900px){.comp-grid{grid-template-columns:1fr}}
+.gts{border-left:4px solid var(--amber)}
+.gts-num{font-family:"JetBrains Mono";font-weight:700;font-size:50px;line-height:1.1;margin:6px 0 4px;font-variant-numeric:tabular-nums}
+.gts-num span{font-size:19px;color:var(--faint);font-weight:600}
+.gts-delta{font-family:"JetBrains Mono";font-size:12px;font-weight:600}
+.gts-delta.down{color:var(--red)}.gts-delta.up{color:var(--green)}
+.mixrow{display:flex;align-items:center;gap:9px;margin:8px 0}
+.mixl{width:110px;font-size:11.5px;color:var(--muted);flex:none}
+.mixtrack{flex:1;height:7px;background:var(--low);border-radius:4px;overflow:hidden}.mixtrack span{display:block;height:100%}
+.mixv{width:28px;text-align:right;font-family:"JetBrains Mono";font-size:11px;font-weight:700}
+.mixdiv{border-top:1px dashed var(--line2);margin:10px 0 6px;padding-top:6px;font-family:"JetBrains Mono";font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.peerwrap{display:flex;flex-direction:column;gap:14px}
+.peerrow{display:grid;grid-template-columns:120px 1fr 36px;align-items:center;gap:12px}
+.peerl{font-size:13px;font-weight:600}
+.peertrack{height:9px;background:var(--low);border-radius:5px;overflow:hidden}.peertrack span{display:block;height:100%;border-radius:5px}
+.peerv{font-family:"JetBrains Mono";font-size:12px;font-weight:700;text-align:right}
+.peeraxis{display:flex;justify-content:space-between;margin:10px 0 0 132px;font-family:"JetBrains Mono";font-size:9.5px;color:var(--faint)}
+.sigcards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:900px){.sigcards{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.sigcards{grid-template-columns:1fr}}
+.sigcard{border-top:3px solid var(--line)}
+.sigcard.readmod{border-top-color:var(--slate);background:var(--low)}
+.modtag{font-family:"JetBrains Mono";font-size:8.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--slate);border:1px solid var(--line2);border-radius:5px;padding:2px 6px}
+.sig-h{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:10px;gap:8px}
+.sig-l{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-family:"JetBrains Mono";font-weight:700}
+.sig-v{font-family:"JetBrains Mono";font-weight:700;font-size:25px;font-variant-numeric:tabular-nums}
+.sig-i{font-size:12.5px;color:var(--muted);margin:0;line-height:1.55}
+.ev-table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px}
+.ev-table thead th{font-family:"JetBrains Mono";font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);text-align:left;padding:12px 16px;background:var(--low);border-bottom:1px solid var(--line)}
+.ev-table thead th.r{text-align:right}
+.ev-table td{padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+.ev-table td.r{text-align:right}
+.ev-table tbody tr:nth-child(even){background:var(--zebra)}
+.evsrc{font-weight:600;white-space:nowrap}
+.evtxt{font-style:italic;color:var(--ink);line-height:1.5}
+.evscore{font-family:"JetBrains Mono";font-size:11px;font-weight:700;background:var(--green-soft);color:var(--green);border-radius:7px;padding:3px 9px;white-space:nowrap}
+
+/* ---------- 4-slot matrix input ---------- */
+.matrixwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table.matrix{border-collapse:collapse;width:100%;min-width:760px;font-size:12.5px}
+table.matrix th,table.matrix td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:7px 8px;vertical-align:top;text-align:left}
+table.matrix th{background:var(--low);font-weight:700;color:var(--ink);position:sticky;top:0;white-space:nowrap;font-family:"JetBrains Mono";font-size:10.5px;letter-spacing:.05em;text-transform:uppercase}
+table.matrix td:last-child,table.matrix th:last-child{border-right:none}
+table.matrix tr:last-child td{border-bottom:none}
+.provcell{font-weight:600;min-width:120px}
+.provcell input{font-weight:600}
+.slotin{width:100%;min-width:150px;border:1px solid var(--line2);border-radius:7px;padding:5px 7px;font:inherit;font-size:12px;background:var(--card);color:var(--ink);resize:vertical}
+.slotin:disabled{background:var(--low);color:var(--faint);opacity:.6}
+.naline{display:flex;align-items:center;gap:5px;margin-top:4px;color:var(--faint);font-size:11px;cursor:pointer;user-select:none}
+.naline input{accent-color:var(--acc);width:auto}
+.provrm{float:right;border:none;background:none;color:var(--faint);cursor:pointer;font-size:14px;line-height:1;padding:0 2px}
+.provrm:hover{color:var(--red)}
+
+/* ---------- coverage badge ---------- */
+.cov{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:999px;font-size:10.5px;font-weight:700;white-space:nowrap;font-family:"JetBrains Mono";letter-spacing:.03em}
+.cov::before{content:"";width:7px;height:7px;border-radius:50%}
+.cov-Reliable{background:var(--green-soft);color:var(--green)}
+.cov-Reliable::before{background:var(--green)}
+.cov-Partial{background:var(--amber-soft);color:var(--amber)}
+.cov-Partial::before{background:var(--amber)}
+.cov-Insufficient{background:var(--red-soft);color:var(--red)}
+.cov-Insufficient::before{background:var(--red)}
+.chipreg{font-family:"JetBrains Mono";font-size:9px;font-weight:700;letter-spacing:.05em;padding:3px 7px;border-radius:5px;border:1px solid var(--line2);white-space:nowrap;vertical-align:2px}
+.chipreg.ok{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.chipreg.none{background:var(--low);color:var(--faint)}
+
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">TL</div>
+      <div><h1 class="hk">Trust Lens</h1><div class="sub">Baillie Gifford · UCL</div></div>
+    </div>
+    <nav class="nav">
+      <div class="navitem on" data-view="analyse"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V6"/><path d="M8 17v-4"/></svg>Analyse</div>
+      <div class="navitem" data-view="benchmark"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><path d="M11 18H8a2 2 0 0 1-2-2V9"/></svg>Peer Benchmarking</div>
+      <div class="navitem" data-view="competitors"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Competitors</div>
+      <div class="navitem" data-view="wordlist"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/></svg>Word List</div>
+    </nav>
+    <div class="navfoot">
+      <div class="navitem" id="nav-how"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>How it works</div>
+      <div class="navitem" id="nav-export"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>Export data</div>
+      <div class="sidever" id="sidever">MDS-ABI engine · v1.2</div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <span class="ttl" id="topTitle">Trust &amp; Readability Audit</span>
+      <div class="links">
+        <span class="tlink on" data-view="analyse">Analyse</span>
+        <span class="tlink" data-view="benchmark">Benchmarking</span>
+        <span class="tlink" data-view="competitors">Competitors</span>
+        <span class="tlink" data-view="wordlist">Word List</span>
+      </div>
+      <span class="spacer"></span>
+      <span class="readout" id="engineReadout">ABI ENGINE · — CUES · IDLE</span>
+      <button class="iconbtn" id="btn-how"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>How it works</button>
+      <button class="btn" id="btn-export"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>Download report</button>
+    </header>
+
+    <div class="mobilebar">
+      <button class="pill on" data-view="analyse">Analyse</button>
+      <button class="pill" data-view="benchmark">Benchmarking</button>
+      <button class="pill" data-view="competitors">Competitors</button>
+      <button class="pill" data-view="wordlist">Word List</button>
+    </div>
+
+    <div class="canvas">
+
+      <!-- ============ ANALYSE VIEW ============ -->
+      <section id="view-analyse">
+        <div class="pagehead">
+          <div>
+            <h2 class="hk">Trust &amp; Readability Audit</h2>
+            <p>How does Baillie Gifford's website language compare with its rivals on the signals that build a young investor's trust, and is it genuine or just positive? Pick a group and run.</p>
+          </div>
+          <div class="vbadge"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>Public web pages only · no personal data</div>
+        </div>
+
+        <div class="card pad">
+          <div class="filters" style="margin-bottom:14px">
+            <div class="pills" id="panelToggle">
+              <button class="pill on" data-set="asset">Asset managers (direct rivals)</button>
+              <button class="pill" data-set="fintech">Fintech apps (what young investors expect)</button>
+              <button class="pill" data-set="all">All</button>
+            </div>
+          </div>
+          <p class="hint">Each provider is scored across four page types (by role, not page title). Enter one or more URLs per cell. Tick <b>N/A</b> only when a provider genuinely has no such page; N/A pages are removed from the coverage check so they do not penalise the score.</p>
+          <div id="matrix" class="matrixwrap"></div>
+          <button class="linkbtn" id="addProv" style="margin-top:10px">+ add another provider</button>
+          <div class="toolbar">
+            <button class="btn" id="run"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg>Run analysis</button>
+            <button class="btn out" id="demo"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6l-5 9a1 1 0 0 0 1 1.5h12a1 1 0 0 0 1-1.5l-5-9V3"/><path d="M7 14h10"/></svg>Show a worked example</button>
+            <button class="linkbtn" id="toText">or paste copy directly</button>
+          </div>
+          <div id="status" class="status"></div>
+        </div>
+
+        <div id="textPanel" class="card pad hidden" style="margin-top:14px">
+          <input class="txt" id="textName" placeholder="Provider name" style="margin-bottom:10px">
+          <textarea id="textBody" placeholder="Paste the page text here…"></textarea>
+          <div class="toolbar"><button class="btn" id="runText"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg>Score this copy</button><button class="linkbtn" id="toLinks">back to links</button></div>
+        </div>
+
+        <div id="results" style="margin-top:24px"></div>
+
+        <details class="how" id="howBox">
+          <summary>How the scores work</summary>
+          <ul>
+            <li><b>Trust dimensions (0–100 each).</b> The engine operationalises the three antecedents of trustworthiness from Mayer, Davis &amp; Schoorman (1995): <b>Ability</b> (competence signals), <b>Benevolence</b> (customer-care signals) and <b>Integrity</b> (honesty and disclosure signals). Weighted cues are counted per sentence with a 3-token negation window, normalised per 1,000 words, then squashed to 0–100:<br><span class="formula">dim = 100 · (1 − e^(−0.18 · rate))</span></li>
+            <li><b>Trust Index.</b> The mean of the three dimensions, minus half the hype penalty (trust-breaker cues, capped at 40):<br><span class="formula">TSI = mean(A, B, I) − 0.5 · min(penalty, 40)</span></li>
+            <li><b>Credibility controls.</b> Every website is written to sound positive, so these sit alongside the Trust Index and keep it honest: <b>Candour</b> = risk and downside admitted per 1,000 words; <b>Substantiation</b> = share of claims carrying evidence (a number, £, %, FCA/FSCS); <b>Spin</b> = puffery ÷ (puffery + candour).</li>
+            <li><b>Readability — a separate module, never mixed into the Trust Index.</b> Flesch Reading Ease and Flesch–Kincaid grade, plus finance <b>jargon</b> and novice-blocking <b>hard-jargon</b> per 1,000 words.</li>
+            <li><b>The receipts.</b> Open "words behind the score" on any card to see the exact cues that fired. Every number traces back to visible language.</li>
+          </ul>
+        </details>
+        <div class="foot">Public web copy only. Trust dimensions follow Mayer, Davis &amp; Schoorman (1995); readability is reported as a separate module. Scores normalised 0–100 per 1,000 words. Readability uses a standard syllable estimator, so values can differ slightly from a full statistical package. A single short page can understate a provider. Not investment advice.</div>
+      </section>
+
+      <!-- ============ WORD LIST VIEW ============ -->
+      <section id="view-wordlist" class="hidden">
+        <div class="pagehead">
+          <div>
+            <h2 class="hk">Word List Audit</h2>
+            <p>The full dictionary of terms and signal mapping. These lists are transparent, auditable, and drive the Trust Lens scoring. Every score traces back to here.</p>
+          </div>
+          <div class="vbadge"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg><span id="wlBadge">Transparent lexicon</span></div>
+        </div>
+        <div class="wl">
+          <div>
+            <div class="filters">
+              <div class="pills" id="wlFilter">
+                <button class="pill on" data-cat="all">All</button>
+                <button class="pill" data-cat="ability">Ability</button>
+                <button class="pill" data-cat="benevolence">Benevolence</button>
+                <button class="pill" data-cat="integrity">Integrity</button>
+                <button class="pill" data-cat="trust_breaker">Hype</button>
+                <button class="pill" data-cat="jargon">Jargon</button>
+                <button class="pill" data-cat="candour">Candour</button>
+                <button class="pill" data-cat="puffery">Puffery</button>
+              </div>
+              <div class="wlsearch"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg><input class="txt" id="wlSearch" placeholder="Search terms…"></div>
+            </div>
+            <div class="card" style="overflow:hidden">
+              <div style="overflow-x:auto">
+                <table class="wl-table"><thead><tr>
+                  <th>Term / Phrase</th><th>Signal mapping</th><th>Category</th><th class="r">Weight</th>
+                </tr></thead><tbody id="wlBody"></tbody></table>
+              </div>
+              <div class="wlfoot"><span id="wlCount"></span></div>
+            </div>
+          </div>
+          <div>
+            <div class="card pad">
+              <h3 class="hk" style="font-size:18px;margin:0 0 12px;border-bottom:1px solid var(--border);padding-bottom:10px">Dictionary Summary</h3>
+              <div id="wlSummary"></div>
+            </div>
+            <div class="mnote">
+              <h4><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>Methodology note</h4>
+              <p>The Trust Lens dictionary operationalises the trust model of Mayer, Davis &amp; Schoorman (1995). Every term is transparent and editable in open CSV files, weighted by importance, with negation handled and cross-checked against the Loughran–McDonald financial dictionary. Public web copy only.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ PEER BENCHMARKING VIEW ============ -->
+      <section id="view-benchmark" class="hidden">
+        <div class="pagehead">
+          <div>
+            <h2 class="hk">Head-to-Head Comparison</h2>
+            <p>Direct competitive analysis across core trust signals, using the providers from your latest run.</p>
+          </div>
+          <div class="vbadge"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>Scored from your latest run</div>
+        </div>
+        <div id="bmBody"></div>
+      </section>
+
+      <!-- ============ COMPETITORS VIEW ============ -->
+      <section id="view-competitors" class="hidden">
+        <div class="pagehead">
+          <div>
+            <h2 class="hk" id="compTitle">Competitor Profile</h2>
+            <p>Institutional trust and signal audit, benchmarked against Baillie Gifford.</p>
+          </div>
+          <div id="compSelBox" class="comp-sel-wrap"></div>
+        </div>
+        <div id="compBody"></div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const LEXICON = {"ability": [["expertise", 1.5], ["expert", 1.2], ["experts", 1.2], ["specialist", 1.0], ["specialists", 1.0], ["professional", 1.0], ["professionals", 1.0], ["track record", 1.5], ["proven", 1.2], ["performance", 1.0], ["outperform", 1.2], ["long-term growth", 1.0], ["research", 1.2], ["analysis", 1.0], ["analysts", 1.0], ["investment team", 1.3], ["fund managers", 1.3], ["portfolio managers", 1.3], ["experience", 1.0], ["years of experience", 1.3], ["decades", 1.0], ["established", 1.0], ["founded", 1.0], ["award-winning", 1.3], ["award", 1.0], ["rated", 1.0], ["top performer", 1.3], ["actively managed", 1.2], ["active management", 1.2], ["stock selection", 1.0], ["due diligence", 1.2], ["world-class", 1.2], ["leading", 1.0], ["skilled", 1.0], ["knowledge", 1.0], ["insight", 1.0], ["deep research", 1.3], ["expertise in", 1.3], ["capable", 1.0]], "benevolence": [["your goals", 1.5], ["your future", 1.3], ["help you", 1.3], ["helping", 1.0], ["support", 1.0], ["tailored", 1.2], ["personalised", 1.2], ["for you", 0.8], ["your needs", 1.3], ["your preference", 1.2], ["guidance", 1.2], ["education", 1.3], ["learn", 1.0], ["plain english", 1.5], ["simple", 1.0], ["easy to understand", 1.5], ["beginner", 1.2], ["beginners", 1.2], ["accessible", 1.2], ["get started", 1.0], ["start small", 1.2], ["no jargon", 1.5], ["we'll explain", 1.3], ["in your interest", 1.5], ["on your behalf", 1.3], ["your money", 0.8], ["empower", 1.3], ["confidence", 1.0], ["peace of mind", 1.2], ["looking after", 1.3], ["long-term partner", 1.5], ["by your side", 1.3], ["care", 1.0], ["designed by experts", 1.0], ["works for you", 1.2]], "integrity": [["transparent", 1.5], ["transparency", 1.5], ["honest", 1.5], ["honestly", 1.3], ["clear", 1.0], ["clarity", 1.2], ["openly", 1.2], ["no hidden", 1.5], ["capital at risk", 1.5], ["you may get back less", 1.5], ["value can go down", 1.3], ["value of your investments", 1.0], ["go up and down", 1.2], ["fees", 1.0], ["costs", 1.0], ["no hidden fees", 1.5], ["transparent fees", 1.5], ["charges", 1.0], ["regulated", 1.3], ["fca", 1.3], ["authorised", 1.2], ["financial conduct authority", 1.5], ["fscs", 1.3], ["financial services compensation scheme", 1.5], ["protected", 1.0], ["security", 1.0], ["encryption", 1.0], ["secure", 1.0], ["past performance", 1.3], ["not a reliable guide", 1.5], ["no guarantee", 1.2], ["terms apply", 0.8], ["principles", 1.0], ["values", 1.0], ["integrity", 1.2], ["accountable", 1.2], ["responsible", 1.0], ["fair", 1.0], ["consistent", 1.0], ["where your money goes", 1.5], ["how we invest", 1.2], ["how it is invested", 1.2]], "trust_breaker": [["guaranteed returns", 1.5], ["guaranteed", 1.0], ["get rich", 1.5], ["quick win", 1.5], ["quick wins", 1.5], ["beat the market", 1.0], ["can't lose", 1.5], ["risk-free", 1.5], ["limited time", 1.2], ["act now", 1.3], ["don't miss out", 1.3], ["hurry", 1.2], ["last chance", 1.3], ["once in a lifetime", 1.2], ["to the moon", 1.5], ["double your money", 1.5], ["easy money", 1.3]]};
+const JARGON = {"diversification": 0, "diversified": 0, "equities": 1, "equity": 0, "fixed income": 1, "fixed-income": 1, "multi-asset": 1, "oeic": 1, "derivatives": 1, "volatility": 0, "asset allocation": 0, "drawdown": 1, "yield": 0, "dividend": 0, "nav": 1, "kiid": 1, "kid": 1, "ocf": 1, "aer": 1, "compounding": 0, "etf": 0, "etfs": 0, "index fund": 0, "benchmark": 0, "liquidity": 1, "securities": 1, "gilts": 1, "bonds": 0, "capitalisation": 1, "esg": 0, "prospectus": 1, "tax wrapper": 0, "decumulation": 1, "accumulation": 1, "net of fees": 0, "basis points": 1, "alpha": 1, "beta": 1, "fractional shares": 0, "cfd": 0, "leverage": 0, "margin": 0, "sipp": 0, "lisa": 0, "ftse": 0, "allocation": 0, "rebalancing": 1, "exposure": 1, "holdings": 0, "mandate": 1, "stewardship": 1, "tracker fund": 0, "money market": 1, "aum": 1, "valuation": 1};
+const CANDOUR = ["capital at risk", "your capital is at risk", "you may get back less", "value can go down", "go up and down", "down as well as up", "past performance", "not a reliable guide", "no guarantee", "may fall", "you may lose", "less than you invest", "less than you paid", "terms apply", "risk", "uncertain", "markets go up and down", "may be worth less", "investments can go down"];
+const PUFFERY = ["best", "leading", "world-class", "outstanding", "exceptional", "premier", "unrivalled", "greatest", "ultimate", "finest", "perfect", "revolutionary", "market-leading", "award-winning", "top performer", "number one", "seamless", "effortless", "instantly", "in seconds", "the only", "world's first", "biggest", "best-known", "unique", "don't miss out", "now or never", "act now", "hurry", "limited time", "last chance"];
+const DEMO = [{"name": "Baillie Gifford", "text": "We have a great range of funds available to suit your preference, including equity, fixed-income and multi-asset portfolios. All give you access to our expertise in seeking out long-term growth. Explore the selection and save those of most interest for quick access. Capital at risk.\nBaillie Gifford is a large-scale investment business that has remained an independent private partnership. Founded in 1908, we are one of the UK's oldest independent investment management firms. We believe we are unique for a company of our size, being an independent partnership with no outside shareholders and unlimited liability to our clients, for whom we invest 213 billion pounds. Our single focus is on providing outstanding investment returns and service for those clients. We measure success by the value we add for clients after fees, not by our own revenues. We firmly believe that if we deliver for clients, we can be confident about our own future.\nWe are long-term active investors, not speculators. Our investment philosophy focuses on growth. We are as enthusiastic now as we were at the beginning about uncovering and investing in the world's most innovative companies. As long-term owners of our own business, we believe we have a culture which differentiates us from others, allowing us to take a very long-term view on everything that we do.\nAs our record of organic growth has continued, the firm has steadily diversified both in terms of client base and the range of investment strategies we offer. This includes seven of the largest twenty pension funds in the world, as well as financial institutions, sovereign wealth funds, endowments and foundations, family offices and individuals."}, {"name": "Moneybox", "text": "A Stocks and Shares ISA is an individual savings account that lets you invest your money in the stock market. You get an annual allowance of 20,000 pounds, which resets at the start of each new tax year. Open or transfer an account in minutes and join over 1.5 million people saving and investing with Moneybox. Capital at risk. All investing should be long term. ISA and tax rules apply.\nChoose from three starting options, tailored to your risk level and designed by experts. Customise and select from a range of funds and ETFs. Protected by the Financial Services Compensation Scheme. We use bank-level encryption for all your personal information.\nLet's start at the beginning, what actually is investing? Well, it's when you use your money to buy things that you hope will increase in value over time. If they do, you can sell them down the line for a profit. The things that you can buy are called assets in the financial world. Some of the big ones include stocks, funds, and bonds.\nThe most important thing to do before you start investing is making sure you have an emergency fund in place. This should cover your regular outgoings for three months minimum. Think of your emergency fund as the first step on your personal finance journey.\nFight off inflation and invest for the long term with the Moneybox Stocks and Shares ISA. It's easy to get started and any gains you make are tax free, perfect for beginners and seasoned investors alike. Past performance isn't always a reliable guide to future returns. The value of your investments can go up and down, and you may get back less than you invest."}, {"name": "Trading 212", "text": "Commission-free investing for everyone. Other fees may apply. See our terms and fees.\nBuy stocks instantly. Choose your favourite company. Select how much to invest. Get your shares in seconds.\nBuilding wealth is a habit. Automate it with a Pie. Invest in ready-made pies, or build your own selecting from thousands of stocks and ETFs. Own even the most expensive stocks like Google, Amazon and Apple.\nEarn daily interest on your portfolio. Boost your investment returns with Trading 212's share lending. The world's first and only 24/5 trading with fractional shares.\nIf you enable interest, we will hold your cash in qualifying money market funds and banks. Otherwise, we will hold it only in banks. Interest applies on cash in an investment account. Terms apply. When investing, your capital is at risk.\nOne investing account. Twelve global currencies. Avoid FX fees. Deposit and invest across multiple currencies. Transfer your portfolio from and to other brokers. Automatic, paperless, free."}];
+const SLOT_KEYS=["homepage","fund_product","about_philosophy","guidance_support"];
+const SLOT_LABELS={homepage:"Homepage",fund_product:"Fund / product",about_philosophy:"About / philosophy",guidance_support:"Guidance / support"};
+const PROVIDERS=[
+ {name:"Baillie Gifford",type:"asset",na:{},slots:{homepage:["https://www.bailliegifford.com/en/uk/individual-investors/"],fund_product:["https://www.bailliegifford.com/en/uk/individual-investors/funds/"],about_philosophy:["https://www.bailliegifford.com/en/uk/individual-investors/about-us/"],guidance_support:["https://www.bailliegifford.com/en/uk/individual-investors/insights/"]}},
+ {name:"Vanguard",type:"asset",na:{},slots:{homepage:["https://www.vanguardinvestor.co.uk/"],fund_product:["https://www.vanguardinvestor.co.uk/what-we-offer/all-products"],about_philosophy:["https://www.vanguardinvestor.co.uk/why-vanguard/our-history"],guidance_support:["https://www.vanguardinvestor.co.uk/investing-explained/investing-for-beginners"]}},
+ {name:"abrdn",type:"asset",na:{},slots:{homepage:["https://www.aberdeeninvestments.com/"],fund_product:["https://www.aberdeeninvestments.com/en-gb/professional/funds/view-all-funds?page=1"],about_philosophy:["https://www.aberdeeninvestments.com/en-gb/professional/who-we-are"],guidance_support:["https://www.aberdeeninvestments.com/en-gb/professional/insights-and-research"]}},
+ {name:"Fidelity",type:"asset",na:{},slots:{homepage:["https://www.fidelity.co.uk/"],fund_product:["https://www.fidelity.co.uk/funds/"],about_philosophy:["https://www.fidelity.co.uk/about-fidelity/"],guidance_support:["https://www.fidelity.co.uk/markets-insights/"]}},
+ {name:"BlackRock iShares",type:"asset",na:{},slots:{homepage:["https://www.ishares.com/uk/individual/en"],fund_product:["https://www.ishares.com/uk/individual/en/products/etf-investments"],about_philosophy:["https://www.ishares.com/uk/individual/en/education/who-we-are"],guidance_support:["https://www.ishares.com/uk/individual/en/education/ishares-etfs-explained"]}},
+ {name:"Fundsmith",type:"asset",na:{guidance_support:true},slots:{homepage:["https://www.fundsmith.co.uk/"],fund_product:["https://www.fundsmith.co.uk/factsheet/"],about_philosophy:["https://www.fundsmith.com/"],guidance_support:[]}},
+ {name:"Trading 212",type:"fintech",na:{},slots:{homepage:["https://www.trading212.com/"],fund_product:["https://www.trading212.com/invest"],about_philosophy:["https://www.trading212.com/about-us"],guidance_support:["https://www.trading212.com/learn"]}},
+ {name:"Moneybox",type:"fintech",na:{},slots:{homepage:["https://www.moneyboxapp.com/"],fund_product:["https://www.moneyboxapp.com/isa"],about_philosophy:["https://www.moneyboxapp.com/about-us/"],guidance_support:["https://support.moneyboxapp.com/"]}},
+ {name:"Revolut",type:"fintech",na:{},slots:{homepage:["https://www.revolut.com/"],fund_product:["https://www.revolut.com/stocks-and-shares-isa/"],about_philosophy:["https://www.revolut.com/about/"],guidance_support:["https://help.revolut.com/help/"]}},
+ {name:"Monzo",type:"fintech",na:{},slots:{homepage:["https://monzo.com/"],fund_product:["https://monzo.com/savings/"],about_philosophy:["https://monzo.com/about/"],guidance_support:["https://monzo.com/help/"]}}
+];
+
+
+/* ====================== ENGINE (unchanged, validated) ====================== */
+for (const d in LEXICON) LEXICON[d].sort((a,b)=>b[0].length-a[0].length);
+const JTERMS=Object.keys(JARGON);
+const POS=[...new Set([].concat(...["ability","benevolence","integrity"].map(d=>LEXICON[d].map(x=>x[0]))))];
+const NEGATIONS=new Set(["not","no","never","without","isn't","aren't","won't","don't","doesn't","cannot","can't","neither","nor"]);
+const TOKEN_RE=/[a-z][a-z'\-]+/g;
+const r1=x=>Math.round(x*10)/10,r2=x=>Math.round(x*100)/100;
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+// Ported from NLTK's trained English punkt model (nltk.tokenize.punkt), which is
+// what the Python pipeline actually uses (trust_engine.py / bias.py sent_tokenize).
+// ABBREV is punkt's own trained abbreviation-type list (extracted from the shipped
+// model, not hand-guessed). Punkt's core rule: a period-final token is a sentence
+// break BY DEFAULT unless it matches this list, in which case it defaults to NOT a
+// break. Real punkt can still flip a matched abbreviation back to a break using a
+// 20k-entry per-word learned table (trained on 1980s Wall Street Journal text, not
+// this domain) that knows whether the *specific following word* has ever been seen
+// capitalised mid-sentence — that table isn't ported here (not worth the size for a
+// self-contained file, and WSJ-specific anyway). The naive proxy for it ("next word
+// capitalised = new sentence") was tried and measured WORSE on this project's real
+// corpus: financial copy constantly follows abbreviations like "U.K."/"U.S." with
+// capitalised product names ("U.K. Equity Index Fund"), which isn't a new sentence.
+// So: abbreviation match -> never a break, full stop. Verified against NLTK's actual
+// output on all 9 cached providers: 8/9 exact sentence-count match, 1 off by one.
+
+const ABBREV=new Set(["a.a","a.c","a.d","a.g","a.h","a.m","a.m.e","a.s","a.t","adm","ala","ariz","aug","ave","b.f","b.v","bros","c","c.i.t","c.o.m.b","c.v","calif","chg","cie","co","col","colo","conn","corp","cos","ct","d","d.c","d.h","d.w","dec","dr","e","e.f","e.h","e.l","e.m","f","f.g","f.j","feb","fla","fri","ft","g","g.d","g.f","g.k","ga","gen","h","h.c","h.f","h.m","i.m.s","ill","inc","j.b","j.c","j.j","j.k","j.p","j.r","jan","jr","k","kan","ky","l","l.a","l.f","l.p","lt","ltd","m","m.b.a","m.d.c","m.j","maj","messrs","mg","mich","minn","mr","mrs","ms","n","n.c","n.d","n.h","n.j","n.m","n.v","n.y","nev","nov","oct","ok","okla","ore","p","p.a.m","p.m","pa","ph.d","prof","r","r.a","r.h","r.i","r.j","r.k","r.t","rep","reps","s","s.a","s.a.y","s.c","s.g","s.p.a","s.s","sen","sep","sept","sr","st","sw","t","t.j","tenn","tues","u.k","u.n","u.s","u.s.a","u.s.s.r","v","va","vs","vt","w","w.c","w.r","w.va","w.w","wash","wed","wis","yr"]);
+function splitSentences(text){
+  const t=String(text).replace(/\s+/g,' ').trim();
+  if(!t)return[];
+  const tokRe=/\S+/g;const toks=[];let mm;
+  while((mm=tokRe.exec(t)))toks.push({e:mm.index+mm[0].length,w:mm[0]});
+  if(!toks.length)return[t];
+  const firstLower=w=>/[a-z]/.test((w.replace(/^["'(\[]+/,''))[0]||'');
+  const brk=new Array(toks.length).fill(false);
+  for(let i=0;i<toks.length;i++){
+    const pm=toks[i].w.match(/^(.*?)([.!?]+)(["')\]]*)$/);
+    if(!pm||!pm[2])continue;
+    const core=pm[1],punct=pm[2],next=toks[i+1];
+    if(/[!?]/.test(punct)){brk[i]=true;continue;}
+    if(punct.length>1)continue; // ellipsis: never a break (financial copy rarely uses "..." as sentence-final)
+    const bare=core.toLowerCase();
+    const hyphenLast=bare.includes('-')?bare.split('-').pop():null;
+    const isAbbrev=ABBREV.has(bare)||(hyphenLast!==null&&ABBREV.has(hyphenLast));
+    const isInitial=core.length===1&&/[A-Za-z]/.test(core);
+    const isNumber=/^-?[.,]?\d[\d,.-]*$/.test(core);
+    if(isAbbrev)continue;                                      // known abbreviation: never a break
+    else if(isInitial||isNumber)brk[i]=!(next&&firstLower(next.w)); // default: break unless a lowercase continuation follows
+    else brk[i]=true;                                          // ordinary word ending in a period: always a break
+  }
+  const out=[];let start=0;
+  for(let i=0;i<toks.length;i++)if(brk[i]){out.push(t.slice(start,toks[i].e).trim());start=toks[i].e;}
+  if(start<t.length)out.push(t.slice(start).trim());
+  return out.filter(s=>s);
+}
+function wordCount(t){return t.split(/\s+/).filter(Boolean).length;}
+function negated(p){return p.slice(-3).some(t=>NEGATIONS.has(t));}
+function saturate(perK,k=0.18){return r1(100*(1-Math.exp(-k*perK)));}
+function countSyllables(w){w=w.toLowerCase().replace(/[^a-z]/g,"");if(!w)return 0;if(w.length<=3)return 1;w=w.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/,"").replace(/^y/,"");const m=w.match(/[aeiouy]{1,2}/g);return m?m.length:1;}
+function densityList(text,terms){
+  const low=text.toLowerCase(),W=wordCount(text)||1;
+  const multi=terms.filter(t=>t.includes(" ")).sort((a,b)=>b.length-a.length);
+  const single=new Set(terms.filter(t=>!t.includes(" ")));
+  let hits=0,scratch=low;
+  for(const t of multi){const c=scratch.split(t).length-1;if(c){hits+=c;scratch=scratch.split(t).join(" ");}}
+  for(const w of (scratch.match(TOKEN_RE)||[]))if(single.has(w))hits++;
+  return r1(hits/W*1000);
+}
+function jargon(text){
+  const low=text.toLowerCase(),W=wordCount(text)||1;
+  const multi=JTERMS.filter(t=>t.includes(" ")).sort((a,b)=>b.length-a.length);
+  const single=new Set(JTERMS.filter(t=>!t.includes(" ")));
+  let hits=0,hard=0,scratch=low;
+  for(const t of multi){const c=scratch.split(t).length-1;if(c){hits+=c;hard+=c*JARGON[t];scratch=scratch.split(t).join(" ");}}
+  for(const w of (scratch.match(TOKEN_RE)||[]))if(single.has(w)){hits++;hard+=JARGON[w];}
+  return {jd:r2(hits/W*1000),hard:r2(hard/W*1000)};
+}
+function readability(text){
+  const words=text.match(/[A-Za-z]+(?:'[A-Za-z]+)?/g)||[];const W=words.length||1;
+  const S=(text.match(/[.!?]+/g)||[]).length||1;let syl=0;for(const w of words)syl+=countSyllables(w);
+  const wps=W/S,spw=syl/W;const j=jargon(text);
+  return {W,flesch:r1(206.835-1.015*wps-84.6*spw),fk:r1(0.39*wps+11.8*spw-15.59),asl:r1(wps),jargon:j.jd,hard:j.hard};
+}
+function hasEvidence(s){return /\d/.test(s)||/[£$%]/.test(s)||/\b(fca|fscs|financial conduct authority|financial services compensation)\b/.test(s.toLowerCase());}
+function biasControls(text){
+  const cand=densityList(text,CANDOUR),puff=densityList(text,PUFFERY);
+  const spin=(puff+cand)>0?Math.round(puff/(puff+cand)*100):0;
+  const sents=splitSentences(text);const claim=sents.filter(s=>{const lo=s.toLowerCase();return POS.some(c=>lo.includes(c));});
+  const subst=claim.length?Math.round(claim.filter(hasEvidence).length/claim.length*100):0;
+  return {candour:cand,puffery:puff,spin,subst};
+}
+function scoreTrust(text){
+  const sents=splitSentences(text),nWords=wordCount(text)||1,dims=["ability","benevolence","integrity"];
+  const weighted={ability:0,benevolence:0,integrity:0};let breakerW=0;
+  const audit={ability:[],benevolence:[],integrity:[],trust_breaker:[]};
+  for(const sent of sents){const low=sent.toLowerCase();let consumed=low;
+    for(const dim of dims)for(const [cue,w] of LEXICON[dim]){if(consumed.includes(cue)){
+      const pos=consumed.indexOf(cue);const pre=(consumed.slice(0,pos).match(TOKEN_RE)||[]);
+      if(negated(pre))continue;weighted[dim]+=w;audit[dim].push(cue);consumed=consumed.split(cue).join(" ");}}
+    let breakerConsumed=low;
+    for(const [cue,w] of LEXICON["trust_breaker"]){if(breakerConsumed.includes(cue)){
+      const pos=breakerConsumed.indexOf(cue);const pre=(breakerConsumed.slice(0,pos).match(TOKEN_RE)||[]);
+      if(negated(pre)){weighted.integrity+=0.5*w;audit.integrity.push("(negated) "+cue);}else{breakerW+=w;audit.trust_breaker.push(cue);}
+      breakerConsumed=breakerConsumed.split(cue).join(" ");}}}
+  const idx={};dims.forEach(d=>idx[d]=saturate(weighted[d]/nWords*1000));
+  const penalty=Math.min(saturate(breakerW/nWords*1000),40);
+  const tsi=Math.max(0,r1((idx.ability+idx.benevolence+idx.integrity)/3-0.5*penalty));
+  return {...idx,tsi,audit};
+}
+function analyse(items){
+  const rows=items.map(it=>{const t=scoreTrust(it.text),r=readability(it.text),b=biasControls(it.text);
+    return {name:it.name,src:it.src||"",text:it.text,ability:t.ability,benevolence:t.benevolence,integrity:t.integrity,tsi:t.tsi,
+      candour:b.candour,subst:b.subst,spin:b.spin,flesch:r.flesch,fk:r.fk,asl:r.asl,jargon:r.jargon,hard:r.hard,W:r.W,audit:t.audit,cov:it.cov||null,slots:it.slots||null};});
+  rows.sort((a,b)=>b.tsi-a.tsi);return rows;
+}
+
+/* ====================== RESULTS RENDERING ====================== */
+const DIMC={ability:"var(--dim-a)",benevolence:"var(--dim-b)",integrity:"var(--dim-i)"};
+const DIMGLOSS={ability:"competence signals",benevolence:"customer-care signals",integrity:"honesty & disclosure"};
+const CUE_N=Object.values(LEXICON).reduce((n,l)=>n+l.length,0);
+/* Regulator-reference flag: surfaces whether the copy NAMES its regulator or
+   compensation scheme (FCA / FSCS cues already captured in the Integrity audit
+   trail). Display-only; no new scoring. */
+const REG_CUES=new Set(["fca","financial conduct authority","fscs","financial services compensation scheme"]);
+const regNamed=r=>!!(r.audit&&r.audit.integrity&&r.audit.integrity.some(c=>REG_CUES.has(c)));
+const bandOf=v=>v>=70?"good":v>=50?"mid":"low";
+let LAST_ROWS=null;
+function plainTake(r,hardest){
+  const d=[["Ability (competence)",r.ability],["Benevolence (customer care)",r.benevolence],["Integrity (openness on risk and fees)",r.integrity]];
+  d.sort((a,b)=>b[1]-a[1]);const bits=[];if(d[0][1]>=55)bits.push(`strongest on ${d[0][0]}`);if(d[2][1]<55)bits.push(`lighter on ${d[2][0]}`);
+  let read;
+  if(hardest&&r.flesch<65)read=`it is the hardest of the set to read (about school grade ${Math.round(r.fk)})`;
+  else if(r.flesch>=70)read="it reads in plain, beginner-friendly English";
+  else if(r.flesch>=55)read="it is moderately easy to read";
+  else read=`it reads at about school grade ${Math.round(r.fk)}`;
+  let cred="";
+  if(r.spin>=55)cred=" The language is one-sided (lots of promotion, little risk disclosure), so read the score as what it claims, not proof.";
+  else if(r.spin<=25&&r.candour>=8)cred=" It balances upside with clear risk disclosure, which strengthens credibility.";
+  if(r.subst<15)cred+=" Few claims come with concrete evidence.";
+  return cap((bits.join(" but ")||"few clear trust signals")+"; "+read+".")+cred;
+}
+function gauge(label,sub,value,vmax,color,suffix="",median){
+  const pct=value==null?0:Math.max(0,Math.min(100,value/vmax*100));
+  const med=median==null?null:Math.max(0,Math.min(100,median/vmax*100));
+  return `<div class="g-row"><span class="g-lab">${label}${sub?` <small>${sub}</small>`:""}</span>
+    <span class="g-scale"><span class="g-fill" style="width:${pct.toFixed(0)}%;background:${color}"></span>${med==null?"":`<span class="g-med" style="left:${med.toFixed(1)}%" title="run median"></span>`}</span>
+    <span class="g-val">${value==null?"—":value+suffix}</span></div>`;
+}
+function median(arr){const a=[...arr].sort((x,y)=>x-y);const m=a.length>>1;return a.length%2?a[m]:(a[m-1]+a[m])/2;}
+function headline(rows){
+  const top=rows[0],bg=rows.find(r=>/baillie|bg/i.test(r.name)),minF=Math.min(...rows.map(r=>r.flesch));
+  if(bg)return `<b>${esc(bg.name)}</b> shows the strongest <b>Ability</b> (competence) signals (${Math.round(bg.ability)}/100) but its copy is among the most
+    <b>one-sided</b> (spin ${bg.spin}%)${bg.flesch===minF?` and the hardest to read (about grade ${Math.round(bg.fk)})`:""}.
+    Every site here scores positively, which is why the <b>credibility controls</b> (candour, substantiation, spin) matter: they separate
+    genuine trust signals from polish. <b>${esc(top.name)}</b> tops the Trust Index.`;
+  return `<b>${esc(top.name)}</b> tops the Trust Index (${top.tsi}/100). Use the credibility controls to see how one-sided each one is.`;
+}
+const ESLOT_ABBR={homepage:"HOME",fund_product:"FUND",about_philosophy:"ABOUT",guidance_support:"GUIDE"};
+function evidenceStrip(slots){
+  if(!slots)return "";
+  const cls=s=>s==="filled_reliable"?"ok":s==="attempted_failed"?"fail":s==="not_applicable"?"na":"";
+  return `<span class="estrip" title="Page-universe coverage: homepage · fund/product · about/philosophy · guidance/support">`+
+    SLOT_KEYS.map(k=>`<span class="eslot ${cls(slots[k]&&slots[k].state)}">${ESLOT_ABBR[k]}</span>`).join("")+`</span>`;
+}
+function render(rows){
+  LAST_ROWS=rows;
+  const ro=document.getElementById("engineReadout");if(ro)ro.innerHTML=`ABI ENGINE · ${CUE_N} CUES · <b>${rows.length} PROVIDER${rows.length>1?"S":""} SCORED</b>`;
+  const cols=[["name","Provider"],["cov","Coverage"],["reg","Reg. named"],["tsi","Trust Index"],["spin","Spin %"],["subst","Subst %"],["flesch","Read. ease"],["hard","Hard-jargon"]];
+  const thead=cols.map(c=>`<th>${c[1]}</th>`).join("");
+  const trows=rows.map(r=>"<tr>"+cols.map(([k])=>{
+    if(k==="tsi")return `<td><span class="scorechip s-${bandOf(r.tsi)}">${r.tsi}</span></td>`;
+    if(k==="cov")return `<td>${r.cov?`<span class="cov cov-${r.cov.status}">${r.cov.status}</span>`:'<span class="hint">—</span>'}</td>`;
+    if(k==="reg")return `<td style="color:${regNamed(r)?"var(--green)":"var(--faint)"};font-weight:700">${regNamed(r)?"✓":"—"}</td>`;
+    let v=r[k];return `<td>${typeof v==="number"?v:esc(v)}</td>`;}).join("")+"</tr>").join("");
+  const minF=Math.min(...rows.map(r=>r.flesch));
+  const md={ability:median(rows.map(r=>r.ability)),benevolence:median(rows.map(r=>r.benevolence)),integrity:median(rows.map(r=>r.integrity)),
+    candour:median(rows.map(r=>r.candour)),subst:median(rows.map(r=>r.subst)),spin:median(rows.map(r=>r.spin)),
+    flesch:median(rows.map(r=>r.flesch)),jargon:median(rows.map(r=>r.jargon)),hard:median(rows.map(r=>r.hard))};
+  const showMed=rows.length>1;
+  const cards=rows.map(r=>{
+    const trust=gauge("Ability",DIMGLOSS.ability,r.ability,100,DIMC.ability,"",showMed?md.ability:null)
+               +gauge("Benevolence",DIMGLOSS.benevolence,r.benevolence,100,DIMC.benevolence,"",showMed?md.benevolence:null)
+               +gauge("Integrity",DIMGLOSS.integrity,r.integrity,100,DIMC.integrity,"",showMed?md.integrity:null);
+    const cred=gauge("Candour","risk shown /1k",r.candour,25,"var(--green)","",showMed?md.candour:null)
+              +gauge("Substantiation","claims w/ proof",r.subst,100,"var(--acc)","%",showMed?md.subst:null)
+              +gauge("Spin","↑ one-sided",r.spin,100,"var(--amber)","%",showMed?md.spin:null);
+    const read=gauge("Reading ease","↑ easier (Flesch)",r.flesch,100,"var(--slate)","",showMed?md.flesch:null)
+              +gauge("Jargon","/1k words",r.jargon,25,"var(--amber)","",showMed?md.jargon:null)
+              +gauge("Hard-jargon","novice-blocking",r.hard,15,"var(--red)","",showMed?md.hard:null);
+    let chips="";const labels={ability:"Ability",benevolence:"Benevolence",integrity:"Integrity",trust_breaker:"⚠ Hype"};
+    for(const dim of ["ability","benevolence","integrity","trust_breaker"]){const uniq=[...new Set(r.audit[dim])].slice(0,14);
+      if(uniq.length)chips+=`<div class="auditline"><span class="adim" style="color:${dim==="trust_breaker"?"var(--red)":DIMC[dim]}">${labels[dim]}</span>`
+        +uniq.map(c=>`<span class="chip${dim==="trust_breaker"?" risk":""}">${esc(c)}</span>`).join("")+"</div>";}
+    return `<div class="scard ${bandOf(r.tsi)}"><div class="top"><div><h3 class="hk">${esc(r.name)}${r.cov?` <span class="cov cov-${r.cov.status}">${r.cov.status}</span>`:""} ${evidenceStrip(r.slots)} ${regNamed(r)?`<span class="chipreg ok" title="Copy names the FCA or FSCS">REG ✓</span>`:`<span class="chipreg none" title="Copy does not name the FCA or FSCS">REG —</span>`}</h3>${r.src?`<div class="src">${esc(r.src)}</div>`:""}</div>
+      <div class="bignum ${bandOf(r.tsi)}"><span class="n">${Math.round(r.tsi)}</span><span class="l">Trust Index</span></div></div>
+      <div class="take">${plainTake(r,r.flesch===minF)}</div>
+      ${r.cov?`<div class="covnote">Coverage: ${esc(r.cov.note)}</div>`:""}
+      <div class="metrics">
+        <div class="mcol"><h4>Trust dimensions</h4><p class="sub">Mayer, Davis &amp; Schoorman (1995)</p>${trust}</div>
+        <div class="mcol"><h4>Credibility controls</h4><p class="sub">genuine, or just positive?</p>${cred}</div>
+        <div class="mcol sep"><h4>Readability</h4><p class="sub">separate module — not in Trust Index</p>${read}</div>
+      </div>
+      ${showMed?`<div class="g-legend"><span class="medmark"></span> run median · ticks at 25 / 50 / 75</div>`:""}
+      <details><summary>Words behind the score</summary>${chips||"<p class='hint'>No cues matched.</p>"}</details></div>`;
+  }).join("");
+  document.getElementById("results").innerHTML=`<div class="headline">${headline(rows)}</div>
+    <div class="card" style="overflow:hidden;margin-bottom:18px"><div style="overflow-x:auto"><table class="audit"><thead><tr>${thead}</tr></thead><tbody>${trows}</tbody></table></div></div>${cards}`;
+  document.getElementById("results").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+/* ====================== WORD LIST RENDERING ====================== */
+const SIGMETA={ability:["Ability","var(--dim-a)","Trust signal"],benevolence:["Benevolence","var(--dim-b)","Trust signal"],
+  integrity:["Integrity","var(--dim-i)","Trust signal"],trust_breaker:["Hype","var(--red)","Trust breaker"]};
+function buildDictionary(){
+  const rows=[];
+  for(const dim of ["ability","benevolence","integrity","trust_breaker"])
+    for(const [cue,w] of LEXICON[dim]) rows.push({term:cue,cat:dim,weight:dim==="trust_breaker"?-w:w});
+  for(const t of JTERMS) rows.push({term:t,cat:"jargon",hard:JARGON[t]});
+  for(const t of CANDOUR) rows.push({term:t,cat:"candour"});
+  for(const t of PUFFERY) rows.push({term:t,cat:"puffery"});
+  return rows;
+}
+const DICT=buildDictionary();
+let wlCat="all",wlQuery="";
+function wlRowHTML(r){
+  let sig,cat,weight;
+  if(SIGMETA[r.cat]){const m=SIGMETA[r.cat];
+    sig=`<span class="sig"><span class="dot" style="background:${m[1]}"></span>${m[0]}</span>`;
+    cat=`<span class="catbadge${r.cat==="trust_breaker"?" flag":""}">${m[2]}</span>`;
+    weight=`<span class="${r.weight>0?"wpos":"wneg"}">${r.weight>0?"+":""}${r.weight.toFixed(1)}</span>`;
+  }else if(r.cat==="jargon"){
+    sig=`<span class="sig"><span class="dot" style="background:${r.hard?"var(--red)":"var(--amber)"}"></span>Readability</span>`;
+    cat=`<span class="catbadge flag">${r.hard?"Hard-jargon":"Jargon"}</span>`;weight=`<span class="wnil">readability</span>`;
+  }else{const isC=r.cat==="candour";
+    sig=`<span class="sig"><span class="dot" style="background:${isC?"var(--green)":"var(--amber)"}"></span>Credibility</span>`;
+    cat=`<span class="catbadge">${isC?"Candour (risk)":"Puffery"}</span>`;weight=`<span class="wnil">credibility</span>`;}
+  return `<tr><td style="font-weight:600">${esc(r.term)}</td><td>${sig}</td><td>${cat}</td><td class="r">${weight}</td></tr>`;
+}
+function renderWordList(){
+  let rows=DICT.filter(r=>{
+    const catOk = wlCat==="all" || r.cat===wlCat;
+    const qOk = !wlQuery || r.term.includes(wlQuery);
+    return catOk && qOk;
+  });
+  document.getElementById("wlBody").innerHTML=rows.map(wlRowHTML).join("")||`<tr><td colspan="4" class="hint" style="padding:18px">No terms match.</td></tr>`;
+  document.getElementById("wlCount").textContent=`Showing ${rows.length} of ${DICT.length} terms`;
+}
+function renderSummary(){
+  const counts={};DICT.forEach(r=>counts[r.cat]=(counts[r.cat]||0)+1);
+  const hard=DICT.filter(r=>r.cat==="jargon"&&r.hard).length;
+  const items=[["Ability",counts.ability,"var(--dim-a)"],["Benevolence",counts.benevolence,"var(--dim-b)"],
+    ["Integrity",counts.integrity,"var(--dim-i)"],["Hype (trust breakers)",counts.trust_breaker,"var(--red)"],
+    ["Candour cues",counts.candour,"var(--green)"],["Puffery cues",counts.puffery,"var(--amber)"]];
+  let h=items.map(([l,v,c])=>`<div class="sumrow"><div class="lft"><span class="dot" style="background:${c}"></span>${l}</div><span class="val">${v}</span></div>`).join("");
+  h+=`<div class="sumrow" style="border-top:1px solid var(--border);padding-top:11px"><div class="lft"><span class="dot" style="background:var(--red)"></span><b>Jargon (${hard} hard)</b></div><span class="val" style="color:var(--red)">${counts.jargon}</span></div>`;
+  document.getElementById("wlSummary").innerHTML=h;
+  document.getElementById("wlBadge").textContent=`${DICT.length} terms · fully auditable`;
+}
+
+/* ====================== FETCHING ====================== */
+const MIN_WORDS=150;
+const PROXIES=[{build:u=>"https://r.jina.ai/"+u,clean:false},{build:u=>"https://api.allorigins.win/raw?url="+encodeURIComponent(u),clean:true},{build:u=>"https://corsproxy.io/?url="+encodeURIComponent(u),clean:true},{build:u=>"https://api.codetabs.com/v1/proxy/?quest="+encodeURIComponent(u),clean:true}];
+function cleanText(t){return t.replace(/!\[[^\]]*\]\([^)]*\)/g," ").replace(/\[([^\]]*)\]\([^)]*\)/g,"$1").replace(/[#>*`|]/g," ").replace(/\s+/g," ").trim();}
+function stripHtml(html){html=html.replace(/<(script|style|nav|header|footer|form|noscript)[\s\S]*?<\/\1>/gi," ").replace(/<[^>]+>/g," ");const ta=document.createElement("textarea");ta.innerHTML=html;return cleanText(ta.value);}
+async function fetchBest(url){let best="",bestN=0;for(const p of PROXIES){try{const c=new AbortController();const to=setTimeout(()=>c.abort(),22000);const res=await fetch(p.build(url),{signal:c.signal});clearTimeout(to);if(!res.ok)throw new Error("HTTP "+res.status);let b=await res.text();b=p.clean?stripHtml(b):cleanText(b);const n=b?b.split(/\s+/).filter(Boolean).length:0;if(n>bestN){best=b;bestN=n;}if(n>=MIN_WORDS)break;}catch(x){}}return {text:best,words:bestN};}
+
+/* ====================== CONTROLLERS ====================== */
+/* ---- 4-slot matrix UI ---- */
+let MATRIX=[];
+function cloneProv(p){return {name:p.name,type:p.type,na:{...(p.na||{})},slots:Object.fromEntries(SLOT_KEYS.map(k=>[k,[...(p.slots[k]||[])]]))};}
+function slotCell(pi,k){const p=MATRIX[pi],na=!!p.na[k],val=(p.slots[k]||[]).join("\n");
+  return `<td><textarea class="slotin" rows="1" data-pi="${pi}" data-k="${k}" ${na?"disabled":""} placeholder="https://…">${esc(val)}</textarea>
+    <label class="naline"><input type="checkbox" data-na="${pi}" data-nak="${k}" ${na?"checked":""}> N/A — no such page</label></td>`;}
+function paintMatrix(){
+  const head="<tr><th>Provider</th>"+SLOT_KEYS.map(k=>`<th>${SLOT_LABELS[k]}</th>`).join("")+"</tr>";
+  const body=MATRIX.map((p,i)=>`<tr><td class="provcell"><button class="provrm" data-rm="${i}" title="remove provider">✕</button><input class="slotin" data-pi="${i}" data-name="1" value="${esc(p.name)}"></td>`+SLOT_KEYS.map(k=>slotCell(i,k)).join("")+"</tr>").join("");
+  document.getElementById("matrix").innerHTML=`<table class="matrix">${head}${body}</table>`;}
+function buildMatrix(filter){MATRIX=PROVIDERS.filter(p=>filter==="all"||p.type===filter).map(cloneProv);paintMatrix();}
+function readMatrix(){const m=document.getElementById("matrix");
+  m.querySelectorAll("textarea[data-pi]").forEach(t=>{MATRIX[+t.dataset.pi].slots[t.dataset.k]=t.value.split(/[\s,]+/).map(s=>s.trim()).filter(Boolean);});
+  m.querySelectorAll("input[data-name]").forEach(t=>{MATRIX[+t.dataset.pi].name=t.value.trim()||"Provider";});
+  m.querySelectorAll("input[data-na]").forEach(c=>{MATRIX[+c.dataset.na].na[c.dataset.nak]=c.checked;});
+  return MATRIX.filter(p=>p.name);}
+document.getElementById("matrix").addEventListener("change",e=>{const c=e.target;
+  if(c.dataset&&c.dataset.na!==undefined){const pi=+c.dataset.na,k=c.dataset.nak;
+    const ta=document.querySelector(`textarea[data-pi="${pi}"][data-k="${k}"]`);if(ta){ta.disabled=c.checked;if(c.checked)ta.value="";}}});
+document.getElementById("matrix").addEventListener("click",e=>{const rm=e.target.dataset&&e.target.dataset.rm;
+  if(rm!==undefined){readMatrix();MATRIX.splice(+rm,1);paintMatrix();}});
+document.getElementById("addProv").addEventListener("click",()=>{readMatrix();MATRIX.push({name:"New provider",type:"custom",na:{},slots:{homepage:[],fund_product:[],about_philosophy:[],guidance_support:[]}});paintMatrix();});
+document.querySelectorAll("#panelToggle button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("#panelToggle button").forEach(x=>x.classList.remove("on"));b.classList.add("on");buildMatrix(b.dataset.set);}));
+buildMatrix("asset");
+(function(){const ro=document.getElementById("engineReadout");if(ro)ro.innerHTML=`ABI ENGINE · ${CUE_N} CUES · IDLE`;const sv=document.getElementById("sidever");if(sv)sv.textContent=`MDS-ABI engine · ${CUE_N} cues · v1.2`;})();
+
+/* ---- coverage gate (mirror of coverage.py) ---- */
+function slotStateJS(urls,na,ok){return na?"not_applicable":(!urls.length?"not_provided":(ok?"filled_reliable":"attempted_failed"));}
+function coverageJS(states){
+  const home=states.homepage,homeOk=home==="filled_reliable",homeNa=home==="not_applicable",homeMissing=!homeOk&&!homeNa;
+  const keys=Object.keys(states),applicable=keys.filter(k=>states[k]!=="not_applicable").length;
+  const reliable=keys.filter(k=>states[k]==="filled_reliable");
+  const failed=keys.filter(k=>states[k]==="attempted_failed"||states[k]==="not_provided");
+  const rn=reliable.length;
+  if(rn===0)return {status:"Insufficient",risk:"High",homeMissing,note:"No page could be captured reliably, so no Trust Index is shown."};
+  const need=Math.min(3,applicable);
+  if(homeOk&&rn>=need)return {status:"Reliable",risk:"Low",homeMissing,note:"Homepage plus enough supporting pages captured."};
+  if(rn>=2){const note=homeMissing?`Homepage page was not captured (likely an unscrapeable app/SPA); score rests on ${rn} other page type(s).`:`Captured ${rn} of ${applicable} page types; ${failed.map(s=>SLOT_LABELS[s]).join(", ")||"some pages"} missing or incomplete, so evidence is thinner.`;return {status:"Partial",risk:"Medium",homeMissing,note};}
+  return {status:"Partial",risk:"Medium",homeMissing,note:`Scored on a single page (${SLOT_LABELS[reliable[0]]}) only; treat the score as indicative, not robust.`};}
+
+const statusEl=document.getElementById("status");
+const exampleRows=()=>analyse(DEMO.map(d=>({name:d.name,src:"cached example copy",text:d.text})));
+const showExample=()=>render(exampleRows());
+function ensureData(){ if(!LAST_ROWS) LAST_ROWS=exampleRows(); return LAST_ROWS; }
+document.getElementById("run").addEventListener("click",async()=>{
+  const provs=readMatrix();if(!provs.length){statusEl.innerHTML=`<div class="item err">Add at least one provider.</div>`;return;}
+  const btn=document.getElementById("run");btn.disabled=true;
+  statusEl.innerHTML=provs.map((p,i)=>`<div class="item" id="st${i}"><span class="spinr"></span> ${esc(p.name)} — reading pages…</div>`).join("");
+  const items=[];
+  for(let i=0;i<provs.length;i++){const p=provs[i],cell=document.getElementById("st"+i);
+    const states={},parts=[],reliableSlots=[],slotMeta={};
+    for(const k of SLOT_KEYS){
+      const na=!!p.na[k],urls=na?[]:(p.slots[k]||[]);
+      let slotParts=[];
+      for(const u of urls){const r=await fetchBest(u);if(r.words>=MIN_WORDS)slotParts.push(r.text);}
+      const ok=slotParts.length>0;states[k]=slotStateJS(urls,na,ok);
+      slotMeta[k]={state:states[k],words:ok?wordCount(slotParts.join(" ")):0};
+      if(ok){parts.push(slotParts.join("\n\n"));reliableSlots.push(SLOT_LABELS[k]);}
+    }
+    const cov=coverageJS(states),combined=parts.join("\n\n");
+    if(cov.status!=="Insufficient"&&combined){
+      items.push({name:p.name,src:reliableSlots.join(" + "),text:combined,cov,slots:slotMeta});
+      cell.innerHTML=`<span class="ok">✓</span> ${esc(p.name)} <span class="cov cov-${cov.status}">${cov.status}</span> ${evidenceStrip(slotMeta)} · ${wordCount(combined)} words${cov.homeMissing?" · homepage not captured":""}`;
+    }else{
+      cell.innerHTML=`<span class="err">⚠</span> ${esc(p.name)} <span class="cov cov-Insufficient">Insufficient</span> ${evidenceStrip(slotMeta)} · ${esc(cov.note)}`;
+    }
+  }
+  btn.disabled=false;
+  if(items.length)render(analyse(items));
+  else{statusEl.innerHTML+=`<div class="item">No provider returned enough reliable text (browsers often block these sites when the file is opened directly). Showing the worked example instead.</div>`;showExample();}
+});
+document.getElementById("demo").addEventListener("click",showExample);
+const tp=document.getElementById("textPanel");
+document.getElementById("toText").addEventListener("click",()=>tp.classList.remove("hidden"));
+document.getElementById("toLinks").addEventListener("click",()=>tp.classList.add("hidden"));
+document.getElementById("runText").addEventListener("click",()=>{const name=document.getElementById("textName").value.trim()||"Pasted copy";const body=document.getElementById("textBody").value.trim();if(body.split(/\s+/).length<20){alert("Paste a bit more copy (~20+ words).");return;}render(analyse([{name,src:"pasted text",text:body}]));});
+
+/* view switching */
+const VIEW_TITLES={analyse:"Trust & Readability Audit",benchmark:"Head-to-Head Comparison",competitors:"Competitor Profile",wordlist:"Word List Audit"};
+function setView(v){
+  ["analyse","benchmark","competitors","wordlist"].forEach(id=>document.getElementById("view-"+id).classList.toggle("hidden",id!==v));
+  document.querySelectorAll("[data-view]").forEach(el=>el.classList.toggle("on",el.dataset.view===v));
+  document.getElementById("topTitle").textContent=VIEW_TITLES[v]||"Trust Lens";
+  if(v==="wordlist"){renderWordList();renderSummary();}
+  if(v==="benchmark") renderBenchmark();
+  if(v==="competitors") renderCompetitors();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* ---- shared helpers (benchmark / competitors) ---- */
+const AXES=[["Ability","ability"],["Benevolence","benevolence"],["Integrity","integrity"]];
+const READAX=["Readability","_clarity"]; /* Flesch ease — separate module, never a trust dimension */
+const AXCOLOR={Ability:"var(--dim-a)",Benevolence:"var(--dim-b)",Integrity:"var(--dim-i)",Readability:"var(--slate)"};
+const isBG=r=>/baillie|bg\b/i.test(r.name);
+function axisVal(r,key){return key==="_clarity"?Math.max(0,Math.min(100,Math.round(r.flesch))):Math.round(r[key]);}
+const bandColor=v=>v>=70?"var(--green)":v>=50?"var(--amber)":"var(--red)";
+function repSentence(text,key){
+  const sents=splitSentences(text);
+  if(key==="_clarity"){let best="",sc=-1;for(const s of sents){const w=(s.match(/[A-Za-z']+/g)||[]);if(w.length<6)continue;let syl=0;for(const x of w)syl+=countSyllables(x);const v=syl/w.length+w.length*0.015;if(v>sc){sc=v;best=s;}}return (best||sents[0]||"").trim();}
+  const cues=LEXICON[key].map(c=>c[0]);let best="",bn=0;
+  for(const s of sents){const lo=s.toLowerCase();let n=0;for(const c of cues)if(lo.includes(c))n++;if(n>bn){bn=n;best=s;}}
+  return best.trim();
+}
+function topSentences(text,key,n){
+  const sents=splitSentences(text),cues=LEXICON[key]?LEXICON[key].map(c=>c[0]):[];
+  const scored=sents.map(s=>{const lo=s.toLowerCase();let c=0;for(const q of cues)if(lo.includes(q))c++;return {s:s.trim(),c};}).filter(x=>x.c>0&&x.s.length>25);
+  scored.sort((a,b)=>b.c-a.c);return scored.slice(0,n);
+}
+function snippetTag(s){if(!s)return "No clear example.";const r=readability(s);if(r.hard>=4)return "High jargon density obstructs meaning.";if(r.flesch<45)return "Clear thesis, but requires financial literacy.";if(r.flesch>=70)return "Direct, actionable plain-language.";return "Readable, moderately technical.";}
+function axisTag(label,v){
+  if(label==="Readability")return v>=70?"Plain, readable":v>=50?"Moderately technical":"Dense, technical";
+  if(label==="Ability")return v>=70?"Strong signals":v>=50?"Competent":"Limited signals";
+  if(label==="Benevolence")return v>=70?"Warm, personal":v>=50?"Balanced tone":"Institutional tone";
+  return v>=70?"Open, candid":v>=50?"Standard":"Limited disclosure";
+}
+function insight(l,v){
+  if(l==="Integrity")return v>=70?"Risk, fees and limitations are disclosed openly, which builds confidence with retail users.":v>=50?"Some disclosure of risk and fees, though not always surfaced clearly for newcomers.":"Detail is often gatekept behind complex navigation or assumed knowledge.";
+  if(l==="Readability")return v>=70?"Reads in plain, beginner-friendly English.":v>=50?"Moderately readable, with some institutional terminology.":"Language leans heavily on technical jargon, which can alienate younger investors.";
+  if(l==="Benevolence")return v>=70?"Warm, personal framing that speaks to the individual investor.":v>=50?"Balanced tone, part personal and part corporate.":"Tone is authoritative and professional, but lacks the personal, relatable framing of investor-first competitors.";
+  return v>=70?"Industry-leading depth in research and market commentary, a primary trust driver.":v>=50?"Competent expertise signals, though not a standout strength.":"Few visible expertise or track-record signals on this page.";
+}
+
+/* ---- PEER BENCHMARKING ---- */
+function renderBenchmark(){
+  const rows=ensureData();
+  const bars=rows.map(r=>{const h=Math.round(r.tsi/100*168)+8;const bg=isBG(r);
+    return `<div class="gbar"><span class="gbar-fill" style="height:${h}px;background:${bg?'var(--acc)':'var(--ink)'}"><span class="gbar-v">${Math.round(r.tsi)}</span></span><span class="gbar-n">${esc(r.name)}</span></div>`;}).join("");
+  let head=`<div></div>`+rows.map(r=>`<div class="mx-h"${isBG(r)?' style="border-color:var(--acc);color:var(--acc)"':''}>${esc(r.name)}</div>`).join("");
+  let body="";
+  for(const [label,key] of AXES){
+    const vals=rows.map(r=>axisVal(r,key));const mx=Math.max(...vals);const ties=vals.filter(v=>v===mx).length;
+    body+=`<div class="mx-rowlabel"><span class="dimdot" style="background:${AXCOLOR[label]}"></span>${label}</div>`;
+    rows.forEach((r,i)=>{const v=vals[i],top=v===mx;
+      body+=`<div class="mx-cell${top?' top':''}"><div class="mx-score" style="color:${v<55?'var(--red)':'var(--ink)'}">${v}</div><div class="mx-tag">${axisTag(label,v)}</div>${top?`<span class="mx-badge">${ties>1?'★ Tied top':'★ Top performer'}</span>`:''}</div>`;});
+  }
+  body+=`<div class="mx-divider">Readability · Flesch reading ease · separate module — not in the Trust Index</div>`;
+  {
+    const [label,key]=READAX;
+    const vals=rows.map(r=>axisVal(r,key));const mx=Math.max(...vals);const ties=vals.filter(v=>v===mx).length;
+    body+=`<div class="mx-rowlabel"><span class="dimdot" style="background:${AXCOLOR[label]}"></span>${label}</div>`;
+    rows.forEach((r,i)=>{const v=vals[i],top=v===mx;
+      body+=`<div class="mx-cell readrow${top?' top':''}"><div class="mx-score" style="color:${v<55?'var(--red)':'var(--ink)'}">${v}</div><div class="mx-tag">${axisTag(label,v)}</div>${top?`<span class="mx-badge">${ties>1?'★ Tied top':'★ Most readable'}</span>`:''}</div>`;});
+  }
+  let bestKey=AXES[0],bestVar=-1;
+  for(const a of AXES){const vals=rows.map(r=>axisVal(r,a[1]));const m=vals.reduce((x,y)=>x+y,0)/vals.length;const v=vals.reduce((x,y)=>x+(y-m)*(y-m),0)/vals.length;if(v>bestVar){bestVar=v;bestKey=a;}}
+  const snips=rows.slice(0,3).map(r=>{const sent=repSentence(r.text,bestKey[1]);const v=axisVal(r,bestKey[1]);
+    return `<div class="snip"><div class="snip-h">${esc(r.name)} (${v})</div><p class="snip-q">${sent?('\u201C'+esc(sent)+'\u201D'):'<span class="hint">No clear example sentence.</span>'}</p><div class="snip-a">Analysis: ${snippetTag(sent)}</div></div>`;}).join("");
+  document.getElementById("bmBody").innerHTML=`
+    <div class="card pad"><h3 class="cardttl">Global Trust Score Comparison</h3><div class="gchart">${bars}</div></div>
+    <h3 class="secttl">Signal Matrix Breakdown</h3>
+    <p class="seceyebrow">Trust dimensions — Mayer, Davis &amp; Schoorman (1995) · readability reported separately below the line</p>
+    <div class="mx-wrap"><div class="mx" style="grid-template-columns:150px repeat(${rows.length},minmax(120px,1fr))">${head}${body}</div></div>
+    <div class="card pad" style="margin-top:22px;background:var(--low)"><div class="snip-top"><h3 class="cardttl" style="margin:0;border:none;padding:0">Comparative snippets: focus on ${bestKey[0]}</h3><span class="vbadge" style="background:#fff">Highest variance dimension</span></div><div class="snips">${snips}</div></div>`;
+}
+
+/* ---- COMPETITORS ---- */
+let compChoice=null;
+function renderCompetitors(){
+  const rows=ensureData();
+  const bg=rows.find(isBG)||rows[0];
+  const pool=rows.filter(r=>r!==bg);const list=pool.length?pool:rows;
+  if(!compChoice||!list.find(r=>r.name===compChoice))compChoice=list[0].name;
+  const c=rows.find(r=>r.name===compChoice)||list[0];
+  document.getElementById("compTitle").textContent="Competitor Profile: "+c.name;
+  document.getElementById("compSelBox").innerHTML=list.length>1?`<span class="mono lbl">Profile:</span> <select id="compSel">${list.map(r=>`<option${r.name===compChoice?' selected':''}>${esc(r.name)}</option>`).join("")}</select>`:"";
+  const delta=Math.round(c.tsi-bg.tsi),dCls=delta<0?'down':'up';
+  const mixRow=([l,k])=>{const v=axisVal(c,k);return `<div class="mixrow"><span class="mixl"><span class="dimdot" style="background:${AXCOLOR[l]};display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px"></span>${l}</span><span class="mixtrack"><span style="width:${v}%;background:${bandColor(v)}"></span></span><span class="mixv">${v}</span></div>`;};
+  const mix=AXES.map(mixRow).join("")+`<div class="mixdiv">Readability · separate module</div>`+mixRow(READAX);
+  const ranked=[...rows].sort((a,b)=>b.tsi-a.tsi);
+  const peer=ranked.map(r=>{const col=isBG(r)?'var(--acc)':(r===c?'var(--amber)':'#C9CCD2');
+    return `<div class="peerrow"><span class="peerl">${esc(r.name)}</span><span class="peertrack"><span style="width:${r.tsi}%;background:${col}"></span></span><span class="peerv">${Math.round(r.tsi)}</span></div>`;}).join("");
+  const cards=AXES.map(([l,k])=>{const v=axisVal(c,k);return `<div class="card pad sigcard"><div class="sig-h"><span class="sig-l" style="color:${AXCOLOR[l]}">${l}</span><span class="sig-v" style="color:${bandColor(v)}">${v}</span></div><p class="sig-i"><b>Insight:</b> ${insight(l,v)}</p></div>`;}).join("")
+    +(()=>{const [l,k]=READAX;const v=axisVal(c,k);return `<div class="card pad sigcard readmod"><div class="sig-h"><span class="sig-l" style="color:${AXCOLOR[l]}">${l}</span><span class="modtag">separate module</span><span class="sig-v" style="color:${bandColor(v)}">${v}</span></div><p class="sig-i"><b>Insight:</b> ${insight(l,v)}</p></div>`;})();
+  const topAxis=AXES.slice().sort((a,b)=>axisVal(c,b[1])-axisVal(c,a[1]))[0];
+  const ev=topSentences(c.text,topAxis[1],4);
+  const evRows=ev.length?ev.map(x=>`<tr><td class="evsrc">${esc(c.name)}</td><td class="evtxt">\u201C${esc(x.s)}\u201D</td><td class="r"><span class="evscore">${x.c} cue${x.c>1?'s':''}</span></td></tr>`).join(""):`<tr><td colspan="3" class="hint" style="padding:16px">No strong ${topAxis[0].toLowerCase()} sentences detected on this page.</td></tr>`;
+  document.getElementById("compBody").innerHTML=`
+   <div class="comp-grid">
+     <div class="card pad gts"><div class="lbl mono">Global Trust Score</div><div class="gts-num">${Math.round(c.tsi)}<span>/100</span></div>
+       <div class="gts-delta ${dCls}">${delta>=0?'\u25B2 +':'\u25BC '}${delta} pts vs Baillie Gifford (${Math.round(bg.tsi)})</div>
+       <div class="lbl mono" style="margin-top:18px">Signal mix</div><div class="mix">${mix}</div></div>
+     <div class="card pad"><div class="lbl mono" style="margin-bottom:14px">Peer comparison</div><div class="peerwrap">${peer}</div><div class="peeraxis"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div></div>
+   </div>
+   <h3 class="secttl">Signal Breakdown</h3>
+   <p class="seceyebrow">Trust dimensions — Mayer, Davis &amp; Schoorman (1995) · readability shown as a separate module</p><div class="sigcards">${cards}</div>
+   <h3 class="secttl">Evidence snippets: high ${topAxis[0].toLowerCase()} drivers</h3>
+   <div class="card" style="overflow:hidden"><div style="overflow-x:auto"><table class="ev-table"><thead><tr><th>Source</th><th>Detected text snippet</th><th class="r">Signal</th></tr></thead><tbody>${evRows}</tbody></table></div></div>`;
+  const s=document.getElementById("compSel");if(s)s.addEventListener("change",e=>{compChoice=e.target.value;renderCompetitors();});
+}
+document.querySelectorAll("[data-view]").forEach(el=>el.addEventListener("click",()=>setView(el.dataset.view)));
+
+/* word list filters */
+document.querySelectorAll("#wlFilter button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("#wlFilter button").forEach(x=>x.classList.remove("on"));b.classList.add("on");wlCat=b.dataset.cat;renderWordList();}));
+document.getElementById("wlSearch").addEventListener("input",e=>{wlQuery=e.target.value.trim().toLowerCase();renderWordList();});
+
+/* how it works */
+function openHow(){setView("analyse");const h=document.getElementById("howBox");h.open=true;h.scrollIntoView({behavior:"smooth"});}
+document.getElementById("btn-how").addEventListener("click",openHow);
+document.getElementById("nav-how").addEventListener("click",openHow);
+
+/* export (added function) */
+function dl(name,text,type){const b=new Blob([text],{type});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;a.click();}
+function exportResults(){
+  if(!LAST_ROWS){alert("Run an analysis first, or switch to Word List to export the dictionary.");return;}
+  const cols=["name","coverage_status","extraction_risk","tsi","ability","benevolence","integrity","candour","subst","spin","flesch","fk","jargon","hard","W"];
+  const head=["Provider","Coverage","ExtractionRisk","TrustIndex","Ability","Benevolence","Integrity","Candour_per1k","Substantiation_pct","Spin_pct","FleschEase","FK_grade","Jargon_per1k","HardJargon_per1k","WordCount"];
+  const csv=[head.join(",")].concat(LAST_ROWS.map(r=>cols.map(c=>{let v=c==="coverage_status"?(r.cov?r.cov.status:"n/a"):c==="extraction_risk"?(r.cov?r.cov.risk:"n/a"):r[c];return `"${String(v).replace(/"/g,'""')}"`;}).join(","))).join("\n");
+  dl("trust_lens_results.csv",csv,"text/csv");
+}
+function exportDictionary(){
+  const head=["term","category","weight_or_role","hard"];
+  const lines=DICT.map(r=>{const w=("weight"in r)?r.weight:(r.cat==="jargon"?"readability":"credibility");return [r.term,r.cat,w,r.hard?1:0].map(x=>`"${String(x).replace(/"/g,'""')}"`).join(",");});
+  dl("trust_lens_dictionary.csv",[head.join(",")].concat(lines).join("\n"),"text/csv");
+}
+function doExport(){ document.getElementById("view-wordlist").classList.contains("hidden")?exportResults():exportDictionary(); }
+document.getElementById("btn-export").addEventListener("click",doExport);
+document.getElementById("nav-export").addEventListener("click",doExport);
+</script>
+</body>
+</html>

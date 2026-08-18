@@ -1,0 +1,96 @@
+# Page-universe registry (generic). Each provider is scored across up to FOUR
+# functional page slots, defined by ROLE not by page title:
+#   homepage / fund_product / about_philosophy / guidance_support
+#
+# - A slot may hold one OR several URLs (combined into one corpus for that slot).
+# - Mark a slot `na: true` ONLY when the provider genuinely has no such page
+#   type. N/A slots are removed from the coverage denominator (they do not
+#   penalise the provider). The labeller asserts N/A; the engine never guesses.
+# - Adding a NEW provider = add a block in the same shape. Nothing else changes.
+#
+# Run:  python src/report.py --live
+#   (for JS-rendered sites, first: pip install playwright && playwright install chromium)
+# The coverage gate auto-flags any URL that fails to fetch, so unverified URLs
+# are safe to leave here: they surface as "attempted_failed", not silent zeros.
+
+providers:
+
+  baillie_gifford:
+    label: Baillie Gifford
+    type: asset_manager
+    homepage:         [https://www.bailliegifford.com/en/uk/individual-investors/]
+    fund_product:     [https://www.bailliegifford.com/en/uk/individual-investors/funds/]
+    about_philosophy: [https://www.bailliegifford.com/en/uk/individual-investors/about-us/]
+    guidance_support: [https://www.bailliegifford.com/en/uk/individual-investors/insights/]
+
+  vanguard:
+    label: Vanguard
+    type: asset_manager
+    homepage:         [https://www.vanguardinvestor.co.uk/]
+    fund_product:     [https://www.vanguardinvestor.co.uk/what-we-offer/all-products]
+    about_philosophy: [https://www.vanguardinvestor.co.uk/why-vanguard/our-history]
+    guidance_support: [https://www.vanguardinvestor.co.uk/investing-explained/investing-for-beginners]
+
+  abrdn:
+    label: abrdn
+    type: asset_manager
+    homepage:         [https://www.aberdeeninvestments.com/]
+    fund_product:     ["https://www.aberdeeninvestments.com/en-gb/professional/funds/view-all-funds?page=1"]
+    about_philosophy: [https://www.aberdeeninvestments.com/en-gb/professional/who-we-are]
+    guidance_support: [https://www.aberdeeninvestments.com/en-gb/professional/insights-and-research]
+
+  fidelity:
+    label: Fidelity
+    type: asset_manager
+    homepage:         [https://www.fidelity.co.uk/]
+    fund_product:     [https://www.fidelity.co.uk/funds/]
+    about_philosophy: [https://www.fidelity.co.uk/about-fidelity/]
+    guidance_support: [https://www.fidelity.co.uk/markets-insights/]
+
+  blackrock:
+    label: BlackRock iShares
+    type: asset_manager
+    homepage:         [https://www.ishares.com/uk/individual/en]
+    fund_product:     [https://www.ishares.com/uk/individual/en/products/etf-investments]
+    about_philosophy: [https://www.ishares.com/uk/individual/en/education/who-we-are]
+    guidance_support: [https://www.ishares.com/uk/individual/en/education/ishares-etfs-explained]
+
+  fundsmith:
+    label: Fundsmith
+    type: asset_manager
+    homepage:         [https://www.fundsmith.co.uk/]
+    fund_product:     [https://www.fundsmith.co.uk/factsheet/]
+    about_philosophy: [https://www.fundsmith.com/]
+    guidance_support: {na: true}   # no dedicated education/help hub for UK retail
+
+  trading_212:
+    label: Trading 212
+    type: fintech
+    homepage:         [https://www.trading212.com/]
+    fund_product:     [https://www.trading212.com/invest]
+    about_philosophy: [https://www.trading212.com/about-us]
+    guidance_support: [https://www.trading212.com/learn]
+
+  moneybox:
+    label: Moneybox
+    type: fintech
+    homepage:         [https://www.moneyboxapp.com/]
+    fund_product:     [https://www.moneyboxapp.com/isa]
+    about_philosophy: [https://www.moneyboxapp.com/about-us/]
+    guidance_support: [https://support.moneyboxapp.com/]
+
+  revolut:
+    label: Revolut
+    type: fintech
+    homepage:         [https://www.revolut.com/]
+    fund_product:     [https://www.revolut.com/stocks-and-shares-isa/]
+    about_philosophy: [https://www.revolut.com/about/]
+    guidance_support: [https://help.revolut.com/help/]
+
+  monzo:
+    label: Monzo
+    type: fintech
+    homepage:         [https://monzo.com/]
+    fund_product:     [https://monzo.com/savings/]
+    about_philosophy: [https://monzo.com/about/]
+    guidance_support: [https://monzo.com/help/]

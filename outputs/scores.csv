@@ -1,0 +1,10 @@
+provider,coverage_status,extraction_risk,ability,benevolence,integrity,trust_signal_index,candour_density,substantiation_pct,spin_index,lm_polarity,flesch_reading_ease,flesch_kincaid_grade,jargon_density,hard_jargon_density,word_count
+Moneybox,n/a,n/a,75.3,95.8,99.6,90.2,17.7,11,17,,71.8,6.3,7.07,0.0,283
+Fidelity,n/a,n/a,81.1,77.8,93.4,76.3,5.0,31,28,,37.6,13.7,5.03,1.26,1590
+Baillie Gifford,n/a,n/a,88.7,54.8,80.9,74.8,3.7,20,67,,44.3,11.3,14.71,7.35,272
+Revolut,n/a,n/a,65.4,62.5,90.1,72.7,4.8,38,26,,45.9,10.9,8.28,2.76,2897
+Monzo,n/a,n/a,31.7,83.5,59.9,58.4,0.4,42,87,,57.8,8.7,22.3,22.3,2601
+Fundsmith,n/a,n/a,72.2,13.1,75.2,53.5,1.7,41,35,,38.1,13.3,16.03,9.1,2308
+Vanguard,n/a,n/a,66.9,57.3,27.7,49.4,16.4,44,4,,78.6,5.0,20.41,2.13,7497
+abrdn,n/a,n/a,94.6,23.8,20.2,46.2,2.5,8,0,,53.3,11.5,0.0,0.0,1593
+Trading 212,n/a,n/a,0.0,0.0,98.7,32.9,12.7,0,60,,65.8,5.7,18.99,6.33,158

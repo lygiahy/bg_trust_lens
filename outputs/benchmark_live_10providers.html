@@ -1,0 +1,51 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BG Trust Lens — 10-provider benchmark (live capture)</title>
+<style>
+:root{--ink:#10141D;--muted:#5A6472;--faint:#7A8296;--line:#DFE3EB;--paper:#F4F6F9;--acc:#23409F;
+--green:#0E7C5B;--green-s:#DCF2E9;--amber:#A66B00;--amber-s:#F7ECD4;--red:#C6362B;--red-s:#FBE3E0;--zebra:#F3F5F9;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,system-ui,Arial,sans-serif;padding:32px}
+.wrap{max-width:1080px;margin:0 auto}
+h1{font-size:23px;margin:0 0 4px;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:13.5px;margin:0 0 6px}
+.caveat{background:var(--amber-s);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:11px 15px;font-size:12.5px;color:#5b4300;margin:14px 0 20px;line-height:1.55}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:900px}
+th{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:#EEF1F6;padding:12px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th.l{text-align:left}
+td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+td.num{font-family:"JetBrains Mono",monospace;font-size:12px}
+td.prov{text-align:left;font-weight:600}
+td.prov.bg{color:var(--acc)}
+tr.bgrow{background:#EEF2FC}
+tbody tr:nth-child(even):not(.bgrow){background:var(--zebra)}
+.muted{color:var(--faint)}
+.tsi{font-family:"JetBrains Mono",monospace;font-weight:700;padding:2px 9px;border-radius:7px}
+.tsi.good,.goodt{color:var(--green)}.tsi.good{background:var(--green-s)}
+.tsi.mid,.midt{color:var(--amber)}.tsi.mid{background:var(--amber-s)}
+.tsi.low,.lowt{color:var(--red)}.tsi.low{background:var(--red-s)}
+.cov{font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px}
+.cov.rel{background:var(--green-s);color:var(--green)}
+.cov.par{background:var(--amber-s);color:var(--amber)}
+.cov.ins{background:var(--red-s);color:var(--red)}
+.foot{color:var(--faint);font-size:11.5px;margin-top:16px;line-height:1.6}
+</style></head><body><div class="wrap">
+<h1>Trust Lens — 10-provider benchmark</h1>
+<p class="sub">Ability / Benevolence / Integrity operationalised from Mayer, Davis &amp; Schoorman (1995). Readability is a separate module. Sorted by Trust Index.</p>
+<div class="caveat"><b>Live capture — single run.</b> These figures are from one live fetch. Live re-runs vary within a provider due to dynamic page content and proxy rendering. The deterministic guarantee applies to re-scoring of cached text (canonical corpus). Capture date: <b>[fill from your run]</b>.</div>
+<div class="card"><div class="scroll"><table><thead><tr><th class="l">Provider</th><th>Coverage</th><th>Trust Index</th><th>Ability</th><th>Benevolence</th><th>Integrity</th><th>Spin %</th><th>Subst %</th><th>Candour/1k</th><th>Flesch</th><th>Hard-jgn/1k</th><th>Words</th></tr></thead><tbody>
+<tr><td class="prov">Vanguard</td><td><span class="cov rel">Reliable</span></td><td><span class="tsi good">89.5</span></td><td class="num goodt">74.9</td><td class="num goodt">98.5</td><td class="num goodt">95</td><td class="num">35</td><td class="num">30</td><td class="num">3.3</td><td class="num">49.5</td><td class="num">0.25</td><td class="num muted">4,087</td></tr>
+<tr><td class="prov">Trading 212</td><td><span class="cov rel">Reliable</span></td><td><span class="tsi good">83.9</span></td><td class="num midt">67.5</td><td class="num goodt">85.4</td><td class="num goodt">98.9</td><td class="num">85</td><td class="num">62</td><td class="num">1.1</td><td class="num">53.8</td><td class="num">2.21</td><td class="num muted">2,797</td></tr>
+<tr><td class="prov">Fidelity</td><td><span class="cov rel">Reliable</span></td><td><span class="tsi good">83.5</span></td><td class="num goodt">90.6</td><td class="num goodt">84.8</td><td class="num goodt">92.2</td><td class="num">38</td><td class="num">43</td><td class="num">3.6</td><td class="num">15.3</td><td class="num">0.72</td><td class="num muted">4,308</td></tr>
+<tr><td class="prov">abrdn</td><td><span class="cov rel">Reliable</span></td><td><span class="tsi good">71.9</span></td><td class="num goodt">97.2</td><td class="num midt">68.5</td><td class="num midt">50.1</td><td class="num">23</td><td class="num">34</td><td class="num">2.3</td><td class="num">53.7</td><td class="num">4.19</td><td class="num muted">4,481</td></tr>
+<tr><td class="prov">Monzo</td><td><span class="cov rel">Reliable</span></td><td><span class="tsi mid">69</span></td><td class="num lowt">30.6</td><td class="num goodt">93.6</td><td class="num goodt">82.8</td><td class="num">88</td><td class="num">54</td><td class="num">0.3</td><td class="num">61.2</td><td class="num">8.22</td><td class="num muted">6,703</td></tr>
+<tr><td class="prov">Revolut</td><td><span class="cov rel">Reliable</span></td><td><span class="tsi mid">66.6</span></td><td class="num midt">64.3</td><td class="num midt">61.8</td><td class="num goodt">92.6</td><td class="num">62</td><td class="num">46</td><td class="num">3.1</td><td class="num">41.2</td><td class="num">1.67</td><td class="num muted">4,968</td></tr>
+<tr><td class="prov">Moneybox</td><td><span class="cov par">Partial</span></td><td><span class="tsi mid">65.8</span></td><td class="num lowt">0</td><td class="num goodt">98.5</td><td class="num goodt">99</td><td class="num">37</td><td class="num">47</td><td class="num">10.1</td><td class="num">65</td><td class="num">2.01</td><td class="num muted">515</td></tr>
+<tr><td class="prov">Fundsmith</td><td><span class="cov rel">Reliable</span></td><td><span class="tsi mid">63.2</span></td><td class="num goodt">72.9</td><td class="num lowt">48.1</td><td class="num midt">68.7</td><td class="num">50</td><td class="num">48</td><td class="num">1.1</td><td class="num">62.5</td><td class="num">9.65</td><td class="num muted">3,927</td></tr>
+<tr class=bgrow><td class="prov bg">Baillie Gifford</td><td><span class="cov rel">Reliable</span></td><td><span class="tsi mid">60.8</span></td><td class="num midt">68.3</td><td class="num lowt">49.4</td><td class="num midt">64.6</td><td class="num">22</td><td class="num">46</td><td class="num">2.1</td><td class="num">50.8</td><td class="num">8.19</td><td class="num muted">6,966</td></tr>
+<tr><td class="prov">BlackRock iShares</td><td><span class="cov rel">Reliable</span></td><td><span class="tsi low">41.6</span></td><td class="num lowt">39.2</td><td class="num lowt">22.8</td><td class="num midt">62.7</td><td class="num">18</td><td class="num">19</td><td class="num">1.8</td><td class="num">39.2</td><td class="num">7.34</td><td class="num muted">39,654</td></tr>
+</tbody></table></div></div>
+<p class="foot">Coverage = evidence behind the score (Reliable / Partial / Insufficient). Moneybox is <b>Partial</b> (homepage captured; supporting pages thin, 515 words). Trust dimensions and credibility controls are theory-grounded operationalisations; Flesch/Flesch–Kincaid are published formulas. Public web copy only. Not investment advice.</p>
+</div></body></html>

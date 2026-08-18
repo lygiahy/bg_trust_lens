@@ -1,0 +1,36 @@
+
+[SCRAPE WARNINGS] pages below the 150-word reliability threshold (excluded from scoring):
+  - abrdn              [homepage        ]    52w  https://www.aberdeeninvestments.com/
+  - abrdn              [about_philosophy]    98w  https://www.aberdeeninvestments.com/en-gb/professional/who-we-are
+  - BlackRock iShares  [homepage        ]   126w  https://www.ishares.com/uk/individual/en
+  - BlackRock iShares  [fund_product    ]    41w  https://www.ishares.com/uk/individual/en/products/etf-investments
+  - BlackRock iShares  [about_philosophy]     0w  https://www.ishares.com/uk/individual/en/education/who-we-are
+  - BlackRock iShares  [guidance_support]     0w  https://www.ishares.com/uk/individual/en/education/ishares-etfs-explained
+  - Trading 212        [homepage        ]     0w  https://www.trading212.com/
+  - Trading 212        [fund_product    ]     0w  https://www.trading212.com/invest
+  - Trading 212        [about_philosophy]     0w  https://www.trading212.com/about-us
+  - Trading 212        [guidance_support]    74w  https://www.trading212.com/learn
+
+[COVERAGE]
+  - Baillie Gifford    Reliable     (risk Low) — Homepage plus enough supporting pages captured.
+  - Vanguard           Reliable     (risk Low) — Homepage plus enough supporting pages captured.
+  - abrdn              Partial      (risk Medium) — Homepage page was not captured (likely an unscrapeable app/SPA); score rests on 2 other page type(s).
+  - Fidelity           Reliable     (risk Low) — Homepage plus enough supporting pages captured.
+  - BlackRock iShares  Insufficient (risk High) — No page could be captured reliably, so no Trust Index is shown.
+  - Fundsmith          Reliable     (risk Low) — Homepage plus enough supporting pages captured.
+  - Trading 212        Insufficient (risk High) — No page could be captured reliably, so no Trust Index is shown.
+  - Moneybox           Reliable     (risk Low) — Homepage plus enough supporting pages captured.
+  - Revolut            Reliable     (risk Low) — Homepage plus enough supporting pages captured.
+  - Monzo              Reliable     (risk Low) — Homepage plus enough supporting pages captured.
+
+       provider coverage_status extraction_risk  trust_signal_index  spin_index  word_count
+       Moneybox        Reliable             Low                80.5          26        3028
+       Fidelity        Reliable             Low                77.6          27        1590
+        Revolut        Reliable             Low                74.7          26        2897
+       Vanguard        Reliable             Low                70.3           4        7497
+          Monzo        Reliable             Low                60.9          88        2601
+Baillie Gifford        Reliable             Low                59.2          84       16490
+      Fundsmith        Reliable             Low                55.3          32        2308
+          abrdn         Partial          Medium                46.7           0        1593
+
+saved -> outputs/benchmark_live_10providers_2026-08-05_rerun.csv

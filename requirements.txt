@@ -1,0 +1,14 @@
+# Core (required)
+textstat>=0.7
+nltk>=3.8
+pandas>=2.0
+pyyaml>=6.0
+# Live URL fetch (optional but recommended)
+trafilatura>=1.6
+requests>=2.31
+beautifulsoup4>=4.12
+# JS rendering for SPA / anti-bot sites (recommended for --live):
+#   pip install playwright && playwright install chromium
+playwright>=1.40
+# First run only, to fetch the sentence tokenizer:
+#   python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab')"
